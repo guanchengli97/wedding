@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
   CalendarDays,
+  Image as ImageIcon,
   KeyRound,
   LogOut,
   Mail,
@@ -10,12 +11,15 @@ import {
   RefreshCw,
   Save,
   ShieldCheck,
+  Trash2,
   Users,
   X,
 } from "lucide-react";
 import { confirmSignIn, fetchAuthSession, getCurrentUser, signIn, signOut } from "aws-amplify/auth";
+import { getUrl, remove } from "aws-amplify/storage";
 import { client } from "../../lib/amplify";
 import { useLanguage } from "../i18n";
+import { ImageWithFallback } from "./figma/ImageWithFallback";
 
 type RSVPRecord = {
   id: string;
@@ -46,6 +50,16 @@ type RSVPDraft = {
 type AdminUser = {
   username: string;
   groups: string[];
+};
+
+type GuestPhotoRecord = {
+  id: string;
+  url: string;
+  storagePath: string;
+  originalFileName: string;
+  uploaderName?: string | null;
+  message?: string | null;
+  createdAt?: string | null;
 };
 
 type AuthStep = "signIn" | "newPassword";
@@ -102,6 +116,13 @@ export function RSVPAdmin() {
   const [newPassword, setNewPassword] = useState("");
   const [authStep, setAuthStep] = useState<AuthStep>("signIn");
   const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
+  const [guestPhotos, setGuestPhotos] = useState<GuestPhotoRecord[]>([]);
+  const [loadingGuestPhotos, setLoadingGuestPhotos] = useState(false);
+  const [guestPhotoError, setGuestPhotoError] = useState("");
+  const [selectedGuestPhotoIds, setSelectedGuestPhotoIds] = useState<string[]>([]);
+  const [deletingGuestPhotos, setDeletingGuestPhotos] = useState(false);
+  const [deleteGuestPhotoError, setDeleteGuestPhotoError] = useState("");
+  const [deleteGuestPhotoSuccess, setDeleteGuestPhotoSuccess] = useState("");
 
   const content = {
     title: isZh ? "RSVP 管理" : "RSVP Admin",
@@ -111,6 +132,18 @@ export function RSVPAdmin() {
     error: isZh ? "读取 RSVP 失败。" : "Failed to load RSVP records.",
     empty: isZh ? "还没有收到任何 RSVP。" : "No RSVP submissions yet.",
     total: isZh ? "总提交数" : "Total submissions",
+    uploadedPhotos: isZh ? "宾客上传照片" : "Guest Uploaded Photos",
+    uploadedPhotosHint: isZh ? "可勾选多张照片后批量删除。" : "Select one or more uploaded photos to delete them.",
+    uploadedPhotosEmpty: isZh ? "还没有宾客上传照片。" : "No guest-uploaded photos yet.",
+    uploadedPhotosLoading: isZh ? "正在加载宾客上传照片..." : "Loading uploaded photos...",
+    uploadedPhotosFailed: isZh ? "读取宾客上传照片失败。" : "Failed to load guest-uploaded photos.",
+    selectPhoto: isZh ? "选择照片" : "Select photo",
+    deleteSelectedPhotos: isZh ? "删除所选照片" : "Delete Selected Photos",
+    deletingPhotos: isZh ? "删除中..." : "Deleting...",
+    deletePhotosSuccess: isZh ? "所选照片已删除。" : "Selected photos deleted.",
+    deletePhotosFailed: isZh ? "删除照片失败。" : "Failed to delete selected photos.",
+    noPhotosSelected: isZh ? "请先选择至少一张照片。" : "Select at least one photo first.",
+    uploadedBy: isZh ? "上传者" : "Uploaded by",
     yes: isZh ? "出席" : "Attending",
     no: isZh ? "缺席" : "Not attending",
     guests: isZh ? "人数" : "Guests",
@@ -189,6 +222,54 @@ export function RSVPAdmin() {
     }
   };
 
+  const loadGuestPhotos = async () => {
+    setLoadingGuestPhotos(true);
+    setGuestPhotoError("");
+
+    try {
+      const { data, errors } = await client.models.GuestPhoto.list(
+        {
+          limit: 1000,
+          selectionSet: ["id", "storagePath", "originalFileName", "uploaderName", "message", "createdAt"],
+        },
+        { authMode: "userPool" },
+      );
+
+      if (errors?.length) {
+        throw new Error(errors[0].message);
+      }
+
+      const resolvedPhotos = await Promise.all(
+        (data ?? []).map(async (photo) => {
+          const { url } = await getUrl({ path: photo.storagePath });
+
+          return {
+            id: photo.id,
+            url: url.toString(),
+            storagePath: photo.storagePath,
+            originalFileName: photo.originalFileName,
+            uploaderName: photo.uploaderName,
+            message: photo.message,
+            createdAt: photo.createdAt,
+          } satisfies GuestPhotoRecord;
+        }),
+      );
+
+      resolvedPhotos.sort((left, right) => {
+        const leftTime = left.createdAt ? new Date(left.createdAt).getTime() : 0;
+        const rightTime = right.createdAt ? new Date(right.createdAt).getTime() : 0;
+        return rightTime - leftTime;
+      });
+
+      setGuestPhotos(resolvedPhotos);
+      setSelectedGuestPhotoIds((current) => current.filter((id) => resolvedPhotos.some((photo) => photo.id === id)));
+    } catch (err) {
+      setGuestPhotoError(err instanceof Error && err.message ? err.message : content.uploadedPhotosFailed);
+    } finally {
+      setLoadingGuestPhotos(false);
+    }
+  };
+
   const hydrateAdminSession = async () => {
     try {
       const user = await getCurrentUser();
@@ -223,7 +304,7 @@ export function RSVPAdmin() {
       return;
     }
 
-    void loadRecords();
+    void Promise.all([loadRecords(), loadGuestPhotos()]);
   }, [adminUser]);
 
   const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -295,6 +376,15 @@ export function RSVPAdmin() {
     setNewPassword("");
     setSaveErrorById({});
     setSaveSuccessById({});
+    setGuestPhotos([]);
+    setSelectedGuestPhotoIds([]);
+    setGuestPhotoError("");
+    setDeleteGuestPhotoError("");
+    setDeleteGuestPhotoSuccess("");
+  };
+
+  const handleRefresh = async () => {
+    await Promise.all([loadRecords(), loadGuestPhotos()]);
   };
 
   const updateDraft = (recordId: string, updater: (current: RSVPDraft) => RSVPDraft) => {
@@ -416,6 +506,55 @@ export function RSVPAdmin() {
     }
   };
 
+  const toggleGuestPhotoSelection = (photoId: string) => {
+    setSelectedGuestPhotoIds((current) =>
+      current.includes(photoId) ? current.filter((id) => id !== photoId) : [...current, photoId],
+    );
+    setDeleteGuestPhotoError("");
+    setDeleteGuestPhotoSuccess("");
+  };
+
+  const handleDeleteSelectedGuestPhotos = async () => {
+    if (!selectedGuestPhotoIds.length) {
+      setDeleteGuestPhotoError(content.noPhotosSelected);
+      setDeleteGuestPhotoSuccess("");
+      return;
+    }
+
+    const photosToDelete = guestPhotos.filter((photo) => selectedGuestPhotoIds.includes(photo.id));
+    if (!photosToDelete.length) {
+      setDeleteGuestPhotoError(content.noPhotosSelected);
+      setDeleteGuestPhotoSuccess("");
+      return;
+    }
+
+    setDeletingGuestPhotos(true);
+    setDeleteGuestPhotoError("");
+    setDeleteGuestPhotoSuccess("");
+
+    try {
+      await Promise.all(
+        photosToDelete.map(async (photo) => {
+          await remove({ path: photo.storagePath });
+
+          const { errors } = await client.models.GuestPhoto.delete({ id: photo.id }, { authMode: "userPool" });
+
+          if (errors?.length) {
+            throw new Error(errors[0].message);
+          }
+        }),
+      );
+
+      setGuestPhotos((current) => current.filter((photo) => !selectedGuestPhotoIds.includes(photo.id)));
+      setSelectedGuestPhotoIds([]);
+      setDeleteGuestPhotoSuccess(content.deletePhotosSuccess);
+    } catch (err) {
+      setDeleteGuestPhotoError(err instanceof Error && err.message ? err.message : content.deletePhotosFailed);
+    } finally {
+      setDeletingGuestPhotos(false);
+    }
+  };
+
   if (authLoading && !adminUser) {
     return (
       <div className="min-h-screen bg-[#fdfbf8] py-20 px-4">
@@ -525,7 +664,7 @@ export function RSVPAdmin() {
           <div className="flex gap-3">
             <button
               type="button"
-              onClick={() => void loadRecords()}
+              onClick={() => void handleRefresh()}
               className="inline-flex items-center gap-2 self-start px-5 py-3 border border-[#b8997a] text-[#b8997a] hover:bg-[#b8997a] hover:text-white transition-colors"
             >
               <RefreshCw className="w-4 h-4" />
@@ -550,6 +689,86 @@ export function RSVPAdmin() {
           <p className="text-4xl mt-3 text-[#4a4238]" style={{ fontFamily: "var(--font-serif)" }}>
             {records.length}
           </p>
+        </div>
+
+        <div className="bg-white border border-[#eadccd] p-6 mb-8">
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
+            <div>
+              <div className="flex items-center gap-3 text-[#4a4238]">
+                <ImageIcon className="w-5 h-5 text-[#b8997a]" />
+                <h2 className="text-2xl" style={{ fontFamily: "var(--font-serif)" }}>
+                  {content.uploadedPhotos}
+                </h2>
+              </div>
+              <p className="text-[#6b6256] mt-2">{content.uploadedPhotosHint}</p>
+            </div>
+            <button
+              type="button"
+              disabled={deletingGuestPhotos || loadingGuestPhotos}
+              onClick={() => void handleDeleteSelectedGuestPhotos()}
+              className="inline-flex items-center gap-2 self-start px-4 py-2 bg-[#b85c5c] text-white hover:bg-[#9f4d4d] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+            >
+              <Trash2 className="w-4 h-4" />
+              {deletingGuestPhotos ? content.deletingPhotos : content.deleteSelectedPhotos}
+            </button>
+          </div>
+
+          {loadingGuestPhotos ? <p className="text-[#6b6256]">{content.uploadedPhotosLoading}</p> : null}
+          {!loadingGuestPhotos && guestPhotoError ? <p className="text-[#b85c5c]">{guestPhotoError}</p> : null}
+          {!loadingGuestPhotos && !guestPhotoError && guestPhotos.length === 0 ? (
+            <p className="text-[#6b6256]">{content.uploadedPhotosEmpty}</p>
+          ) : null}
+          {deleteGuestPhotoError ? <p className="mt-4 text-sm text-[#b85c5c]">{deleteGuestPhotoError}</p> : null}
+          {!deleteGuestPhotoError && deleteGuestPhotoSuccess ? (
+            <p className="mt-4 text-sm text-[#61805a]">{deleteGuestPhotoSuccess}</p>
+          ) : null}
+
+          {!loadingGuestPhotos && !guestPhotoError && guestPhotos.length ? (
+            <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+              {guestPhotos.map((photo) => {
+                const isSelected = selectedGuestPhotoIds.includes(photo.id);
+
+                return (
+                  <label
+                    key={photo.id}
+                    className={`block cursor-pointer overflow-hidden border transition-colors ${
+                      isSelected ? "border-[#b85c5c] bg-[#fdf4f4]" : "border-[#eadccd] bg-[#fdfbf8]"
+                    }`}
+                  >
+                    <div className="relative">
+                      <ImageWithFallback
+                        src={photo.url}
+                        alt={photo.originalFileName}
+                        className="h-40 w-full object-cover sm:h-48"
+                      />
+                      <div className="absolute left-3 top-3 rounded-full bg-white/90 px-2 py-1 text-xs text-[#4a4238]">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleGuestPhotoSelection(photo.id)}
+                          className="mr-2 align-middle"
+                          aria-label={`${content.selectPhoto}: ${photo.originalFileName}`}
+                        />
+                        {content.selectPhoto}
+                      </div>
+                    </div>
+                    <div className="p-3 text-sm text-[#6b6256]">
+                      <p className="break-words text-[#4a4238]">{photo.originalFileName}</p>
+                      <p className="mt-1">
+                        {content.uploadedBy}: {photo.uploaderName || content.noValue}
+                      </p>
+                      <p className="mt-1 break-words">
+                        {content.message}: {photo.message || content.noValue}
+                      </p>
+                      <p className="mt-1 text-xs text-[#8a7e70]">
+                        {content.submittedAt}: {photo.createdAt ? new Date(photo.createdAt).toLocaleString() : content.noValue}
+                      </p>
+                    </div>
+                  </label>
+                );
+              })}
+            </div>
+          ) : null}
         </div>
 
         {loading ? <p className="text-[#6b6256]">{content.loading}</p> : null}

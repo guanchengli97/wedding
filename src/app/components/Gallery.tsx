@@ -22,6 +22,7 @@ type GuestPhotoCard = {
   id: string;
   url: string;
   uploaderName?: string | null;
+  message?: string | null;
   originalFileName: string;
   createdAt?: string | null;
 };
@@ -31,6 +32,7 @@ export function Gallery() {
   const isZh = language === "zh";
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
   const [uploaderName, setUploaderName] = useState("");
+  const [guestMessage, setGuestMessage] = useState("");
   const [guestPhotos, setGuestPhotos] = useState<GuestPhotoCard[]>([]);
   const [loadingGuestPhotos, setLoadingGuestPhotos] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -38,18 +40,18 @@ export function Gallery() {
   const [uploadSuccess, setUploadSuccess] = useState("");
 
   const photos = [
-    { url: img5178, alt: isZh ? "山顶风景合照" : "Mountain overlook photo", span: "md:col-span-2 md:row-span-2" },
-    { url: img9589, alt: isZh ? "大场景自拍" : "Grand canyon selfie", span: "" },
-    { url: img9089, alt: isZh ? "海边日落合影" : "Sunset pier selfie", span: "" },
-    { url: img7189, alt: isZh ? "节日街头合照" : "Festival street photo", span: "md:col-span-2" },
-    { url: gliu3296, alt: isZh ? "婚礼出门照" : "Wedding doorway portrait", span: "" },
-    { url: img4087, alt: isZh ? "富士山日出" : "Mount Fuji at sunrise", span: "" },
-    { url: dscf8031, alt: isZh ? "云雾山景" : "Cloudy mountain landscape", span: "" },
-    { url: img96a930, alt: isZh ? "海边依靠" : "Couple by the sea", span: "md:row-span-2" },
-    { url: dsf6050, alt: isZh ? "背影看海" : "Ocean view from behind", span: "" },
-    { url: img0004, alt: isZh ? "小猫玉米" : "Cat portrait", span: "" },
-    { url: img7197, alt: isZh ? "马里奥约会日" : "Mario themed date photo", span: "" },
-    { url: gliu3382, alt: isZh ? "婚礼回望照" : "Wedding look-back portrait", span: "" },
+    { url: img5178, alt: isZh ? "山顶风景合照" : "Mountain overlook photo" },
+    { url: img9589, alt: isZh ? "大峡谷自拍" : "Grand canyon selfie" },
+    { url: img9089, alt: isZh ? "海边日落合影" : "Sunset pier selfie" },
+    { url: img7189, alt: isZh ? "节日街头合照" : "Festival street photo" },
+    { url: gliu3296, alt: isZh ? "婚礼出门照" : "Wedding doorway portrait" },
+    { url: img4087, alt: isZh ? "富士山日出" : "Mount Fuji at sunrise" },
+    { url: dscf8031, alt: isZh ? "云雾山景" : "Cloudy mountain landscape" },
+    { url: img96a930, alt: isZh ? "海边依靠" : "Couple by the sea" },
+    { url: dsf6050, alt: isZh ? "背影看海" : "Ocean view from behind" },
+    { url: img0004, alt: isZh ? "小猫玉米" : "Cat portrait" },
+    { url: img7197, alt: isZh ? "马里奥约会日" : "Mario themed date photo" },
+    { url: gliu3382, alt: isZh ? "婚礼回望照" : "Wedding look-back portrait" },
   ];
 
   const content = {
@@ -57,19 +59,27 @@ export function Gallery() {
     subtitle: isZh ? "珍藏的每一刻" : "Moments we cherish",
     quote: isZh ? "“爱，是一个灵魂栖息在两个身体里。”" : '"Love is composed of a single soul inhabiting two bodies."',
     shareTitle: isZh ? "上传你的照片" : "Upload Your Photos",
-    shareSub: isZh ? "欢迎把你拍到的婚礼瞬间上传到这里，我们也想从你的视角看看这一天。" : "Upload the moments you captured so we can see the wedding through your eyes too.",
+    shareSub: isZh
+      ? "欢迎把你拍到的婚礼瞬间上传到这里，我们也想从你的视角看看这一天。"
+      : "Upload the moments you captured so we can see the wedding through your eyes too.",
     uploaderName: isZh ? "你的名字" : "Your name",
     uploaderNamePlaceholder: isZh ? "可选" : "Optional",
+    message: isZh ? "评论" : "Message",
+    messagePlaceholder: isZh ? "可选，给新人留一句祝福..." : "Optional, leave a note for the couple...",
     choosePhotos: isZh ? "选择照片" : "Choose photos",
     uploadPhotos: isZh ? "上传照片" : "Upload Photos",
     uploading: isZh ? "上传中..." : "Uploading...",
-    uploadHint: isZh ? "支持一次上传多张照片，图片会保存到 S3 并显示在下方。" : "You can upload multiple photos at once. They will be stored in S3 and shown below.",
-    uploadMissingConfig: isZh ? "图片上传功能还没有连接到 Amplify 后端。请先启动 sandbox 或部署后端。" : "Photo upload is not connected to the Amplify backend yet. Start sandbox or deploy the backend first.",
+    uploadHint: isZh
+      ? "支持一次上传多张照片，图片会保存到 S3，并连同留言一起显示在下方。"
+      : "You can upload multiple photos at once. They will be stored in S3 and shown below with your message.",
+    uploadMissingConfig: isZh
+      ? "图片上传功能还没有连接到 Amplify 后端。请先启动 sandbox 或部署后端。"
+      : "Photo upload is not connected to the Amplify backend yet. Start sandbox or deploy the backend first.",
     uploadMissingFiles: isZh ? "请先选择至少一张照片。" : "Choose at least one photo first.",
     uploadSuccess: isZh ? "照片上传成功。" : "Photos uploaded successfully.",
     uploadFailed: isZh ? "照片上传失败，请稍后重试。" : "Photo upload failed. Please try again.",
     uploadedPhotosTitle: isZh ? "宾客上传的照片" : "Guest Uploaded Photos",
-    uploadedPhotosSub: isZh ? "你们上传的照片会出现在这里。" : "Photos uploaded by guests will appear here.",
+    uploadedPhotosSub: isZh ? "你们上传的照片和留言会出现在这里。" : "Photos and notes uploaded by guests will appear here.",
     uploadedEmpty: isZh ? "还没有宾客上传照片，等你来第一张。" : "No guest photos yet. Be the first to upload one.",
     uploadedBy: isZh ? "上传者" : "Uploaded by",
     noValue: isZh ? "未填写" : "Not provided",
@@ -90,7 +100,7 @@ export function Gallery() {
         const { data, errors } = await client.models.GuestPhoto.list(
           {
             limit: 100,
-            selectionSet: ["id", "storagePath", "originalFileName", "uploaderName", "createdAt"],
+            selectionSet: ["id", "storagePath", "originalFileName", "uploaderName", "message", "createdAt"],
           },
           { authMode: "apiKey" },
         );
@@ -109,6 +119,7 @@ export function Gallery() {
               id: photo.id,
               url: url.toString(),
               uploaderName: photo.uploaderName,
+              message: photo.message,
               originalFileName: photo.originalFileName,
               createdAt: photo.createdAt,
             } satisfies GuestPhotoCard;
@@ -168,10 +179,11 @@ export function Gallery() {
               storagePath,
               originalFileName: file.name,
               uploaderName: uploaderName.trim() || undefined,
+              message: guestMessage.trim() || undefined,
             },
             {
               authMode: "apiKey",
-              selectionSet: ["id", "storagePath", "originalFileName", "uploaderName", "createdAt"],
+              selectionSet: ["id", "storagePath", "originalFileName", "uploaderName", "message", "createdAt"],
             },
           );
 
@@ -185,6 +197,7 @@ export function Gallery() {
             id: data.id,
             url: url.toString(),
             uploaderName: data.uploaderName,
+            message: data.message,
             originalFileName: data.originalFileName,
             createdAt: data.createdAt,
           } satisfies GuestPhotoCard;
@@ -200,6 +213,7 @@ export function Gallery() {
       );
       setSelectedFiles(null);
       setUploaderName("");
+      setGuestMessage("");
       setUploadSuccess(content.uploadSuccess);
     } catch (error) {
       const message = error instanceof Error && error.message ? error.message : content.uploadFailed;
@@ -228,7 +242,7 @@ export function Gallery() {
 
       <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-4 auto-rows-[300px]">
+          <div className="columns-2 gap-3 sm:columns-2 md:columns-3 md:gap-4">
             {photos.map((photo, index) => (
               <motion.div
                 key={photo.url}
@@ -236,12 +250,12 @@ export function Gallery() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`relative overflow-hidden group ${photo.span}`}
+                className="group relative mb-3 break-inside-avoid overflow-hidden md:mb-4"
               >
                 <ImageWithFallback
                   src={photo.url}
                   alt={photo.alt}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="h-auto w-full transition-transform duration-700 group-hover:scale-[1.03]"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300" />
               </motion.div>
@@ -298,6 +312,7 @@ export function Gallery() {
                     className="w-full px-4 py-3 border border-[#e8d5c4] bg-white focus:outline-none focus:border-[#b8997a] transition-colors"
                   />
                 </div>
+                
                 <div>
                   <label htmlFor="guest-photo-upload" className="block mb-2 text-[#4a4238]">
                     {content.choosePhotos}
@@ -311,7 +326,21 @@ export function Gallery() {
                     className="block w-full text-[#6b6256] file:mr-4 file:border-0 file:bg-[#b8997a] file:px-4 file:py-3 file:text-white hover:file:bg-[#a07d5f]"
                   />
                 </div>
+                <div>
+                  <label htmlFor="guest-photo-message" className="block mb-2 text-[#4a4238]">
+                    {content.message}
+                  </label>
+                  <textarea
+                    id="guest-photo-message"
+                    rows={3}
+                    value={guestMessage}
+                    onChange={(event) => setGuestMessage(event.target.value)}
+                    placeholder={content.messagePlaceholder}
+                    className="w-full px-4 py-3 border border-[#e8d5c4] bg-white focus:outline-none focus:border-[#b8997a] transition-colors resize-y"
+                  />
+                </div>
               </div>
+              <br />
               <button
                 type="button"
                 onClick={() => void handleUpload()}
@@ -337,7 +366,7 @@ export function Gallery() {
             {!loadingGuestPhotos && guestPhotos.length === 0 ? <p className="text-[#6b6256]">{content.uploadedEmpty}</p> : null}
 
             {guestPhotos.length ? (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 lg:gap-6">
                 {guestPhotos.map((photo, index) => (
                   <motion.div
                     key={photo.id}
@@ -347,11 +376,14 @@ export function Gallery() {
                     transition={{ duration: 0.35, delay: index * 0.04 }}
                     className="overflow-hidden border border-[#eadccd] bg-white"
                   >
-                    <ImageWithFallback src={photo.url} alt={photo.originalFileName} className="h-72 w-full object-cover" />
+                    <ImageWithFallback src={photo.url} alt={photo.originalFileName} className="h-40 w-full object-cover sm:h-56 md:h-72" />
                     <div className="p-4">
                       <p className="text-[#4a4238] break-words">{photo.originalFileName}</p>
                       <p className="mt-2 text-sm text-[#8a7e70]">
                         {content.uploadedBy}: {photo.uploaderName || content.noValue}
+                      </p>
+                      <p className="mt-2 text-sm text-[#6b6256] break-words">
+                        {content.message}: {photo.message || content.noValue}
                       </p>
                     </div>
                   </motion.div>

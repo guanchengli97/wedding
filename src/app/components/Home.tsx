@@ -53,7 +53,7 @@ export function Home() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.3 }}
-          className="relative z-10 text-center text-white px-4"
+          className="relative z-10 -mt-35 px-4 text-center text-white md:mt-0"
         >
           <motion.div
             initial={{ scale: 0 }}
@@ -64,7 +64,7 @@ export function Home() {
             <Heart className="w-12 h-12 mx-auto text-white/90" />
           </motion.div>
 
-          <h1 className="text-6xl md:text-8xl mb-6 tracking-wide" style={{ fontFamily: "var(--font-serif)" }}>
+          <h1 className="text-5xl md:text-8xl mb-6 tracking-wide" style={{ fontFamily: "var(--font-serif)" }}>
             {isZh ? content.title : englishNames}
           </h1>
 
@@ -102,7 +102,7 @@ export function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.5, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          className="absolute bottom-55 left-1/2 transform -translate-x-1/2"
         >
           <ArrowDown className="w-6 h-6 text-white" />
         </motion.div>

@@ -22,6 +22,7 @@ const schema = a.schema({
       storagePath: a.string().required(),
       originalFileName: a.string().required(),
       uploaderName: a.string(),
+      message: a.string(),
     })
     .authorization((allow) => [
       allow.publicApiKey().to(["create", "read"]),
