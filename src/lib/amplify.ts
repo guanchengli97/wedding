@@ -14,3 +14,6 @@ if (hasAmplifyConfig) {
 
 export const amplifyConfigured = hasAmplifyConfig;
 export const client = generateClient<Schema>();
+export const publicClient = generateClient<Schema>({
+  authMode: "apiKey",
+});

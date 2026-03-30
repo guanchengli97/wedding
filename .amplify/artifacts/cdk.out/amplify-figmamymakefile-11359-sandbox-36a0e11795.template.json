@@ -46,6 +46,18 @@
     "awsAppsyncAdditionalAuthenticationTypes"
    ]
   },
+  "AWS::Amplify::Function": {
+   "version": "1",
+   "stackOutputs": [
+    "definedFunctions"
+   ]
+  },
+  "AWS::Amplify::Custom": {
+   "version": "1",
+   "stackOutputs": [
+    "customOutputs"
+   ]
+  },
   "AWS::Amplify::Storage": {
    "version": "1",
    "stackOutputs": [
@@ -221,6 +233,40 @@
   "awsAppsyncAdditionalAuthenticationTypes": {
    "Value": "API_KEY,AWS_IAM"
   },
+  "definedFunctions": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "[\"",
+      {
+       "Fn::GetAtt": [
+        "function1351588B",
+        "Outputs.amplifyfigmamymakefile11359sandbox36a0e11795functionguestphotouploadlambda290FD85BRef"
+       ]
+      },
+      "\"]"
+     ]
+    ]
+   }
+  },
+  "customOutputs": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "{\"custom\":{\"guestPhotoUploadUrl\":\"",
+      {
+       "Fn::GetAtt": [
+        "function1351588B",
+        "Outputs.amplifyfigmamymakefile11359sandbox36a0e11795functionguestphotouploadlambdaFunctionUrlD7AD23BAFunctionUrl"
+       ]
+      },
+      "\"},\"version\":\"1.4\"}"
+     ]
+    ]
+   }
+  },
   "storageRegion": {
    "Value": {
     "Ref": "AWS::Region"
@@ -286,7 +332,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/72d3345641c85f2a34cf598d3b1fc784efe7ed8430211bb9edf8426d6c85eaf3.json"
+       "/addd36f1b296d428ffbd6a2c2769f0b99dbd1c4044def906219851e816bdbb95.json"
       ]
      ]
     }
@@ -354,7 +400,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/b67b5a50189efbd90b8b4d9aec27eb78fc294d97205d235d9dda578626e920a6.json"
+       "/d0485040f9d0fc40c6c3ff3cb1ab598dcf22f803e954156962785188544a5934.json"
       ]
      ]
     }
@@ -364,6 +410,62 @@
    "Metadata": {
     "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data.NestedStack/data.NestedStackResource",
     "aws:asset:path": "amplifyfigmamymakefile11359sandbox36a0e11795data4B11A294.nested.template.json",
+    "aws:asset:property": "TemplateURL"
+   }
+  },
+  "function1351588B": {
+   "Type": "AWS::CloudFormation::Stack",
+   "Properties": {
+    "Parameters": {
+     "referencetoamplifyfigmamymakefile11359sandbox36a0e11795storageNestedStackstorageNestedStackResource83ADAAFBOutputsamplifyfigmamymakefile11359sandbox36a0e11795storageweddingGuestPhotosBucketBE1AA233Arn": {
+      "Fn::GetAtt": [
+       "storage0EC3F24A",
+       "Outputs.amplifyfigmamymakefile11359sandbox36a0e11795storageweddingGuestPhotosBucketBE1AA233Arn"
+      ]
+     },
+     "referencetoamplifyfigmamymakefile11359sandbox36a0e11795storageNestedStackstorageNestedStackResource83ADAAFBOutputsamplifyfigmamymakefile11359sandbox36a0e11795storageweddingGuestPhotosBucketBE1AA233Ref": {
+      "Fn::GetAtt": [
+       "storage0EC3F24A",
+       "Outputs.amplifyfigmamymakefile11359sandbox36a0e11795storageweddingGuestPhotosBucketBE1AA233Ref"
+      ]
+     }
+    },
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ],
+    "TemplateURL": {
+     "Fn::Join": [
+      "",
+      [
+       "https://s3.",
+       {
+        "Ref": "AWS::Region"
+       },
+       ".",
+       {
+        "Ref": "AWS::URLSuffix"
+       },
+       "/",
+       {
+        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+       },
+       "/3510cd0a85f27ef4bbf4cd09f65b7973f963888c77148629052a31989d43fdc0.json"
+      ]
+     ]
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/function.NestedStack/function.NestedStackResource",
+    "aws:asset:path": "amplifyfigmamymakefile11359sandbox36a0e11795functionCD124129.nested.template.json",
     "aws:asset:property": "TemplateURL"
    }
   },
@@ -410,7 +512,7 @@
        {
         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
        },
-       "/9e06d2bd42dfb238e794d3dd95234af5e1c0925b8d82c1cafb5ecede16ece2fa.json"
+       "/be21d023dc5d39dfeb7cbd91ae5645d9485bdc83080a332d4040655ff38dd1b9.json"
       ]
      ]
     }
@@ -426,7 +528,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zPSMzIx1TNQTCwv1k1OydbNyUzSqw4uSUzO1nFOy/MvLSkoLQGxwEK1Onn5Kal6WcX6ZUZGeoYWegaKWcWZmbpFpXklmbmpekEQGgDaLwCtVAAAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zPSMzIx1TNQTCwv1k1OydbNyUzSqw4uSUzO1nFOy/MvLSkoLQGxwEK1Onn5Kal6WcX6ZUYGeiCkmFWcmalbVJpXkpmbqhcEoQE1Wqi5VAAAAA=="
    },
    "Metadata": {
     "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/CDKMetadata/Default"

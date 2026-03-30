@@ -301,5 +301,8 @@
       }
     ]
   },
-  "version": "1.4"
+  "version": "1.4",
+  "custom": {
+    "guestPhotoUploadUrl": "https://nqqucci6ysx7nudnn5o6too7pq0xezzx.lambda-url.us-east-2.on.aws/"
+  }
 }

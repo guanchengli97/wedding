@@ -194,6 +194,18 @@
       "data": "awsAppsyncAdditionalAuthenticationTypes"
     }
   ],
+  "/amplify-figmamymakefile-11359-sandbox-36a0e11795/definedFunctions": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "definedFunctions"
+    }
+  ],
+  "/amplify-figmamymakefile-11359-sandbox-36a0e11795/customOutputs": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "customOutputs"
+    }
+  ],
   "/amplify-figmamymakefile-11359-sandbox-36a0e11795/storageRegion": [
     {
       "type": "aws:cdk:logicalId",
@@ -374,10 +386,52 @@
       "data": "data7552DF31"
     }
   ],
+  "/amplify-figmamymakefile-11359-sandbox-36a0e11795/function/reference-to-amplifyfigmamymakefile11359sandbox36a0e11795storageNestedStackstorageNestedStackResource83ADAAFBOutputs.amplifyfigmamymakefile11359sandbox36a0e11795storageweddingGuestPhotosBucketBE1AA233Arn": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795storageNestedStackstorageNestedStackResource83ADAAFBOutputsamplifyfigmamymakefile11359sandbox36a0e11795storageweddingGuestPhotosBucketBE1AA233Arn"
+    }
+  ],
+  "/amplify-figmamymakefile-11359-sandbox-36a0e11795/function/reference-to-amplifyfigmamymakefile11359sandbox36a0e11795storageNestedStackstorageNestedStackResource83ADAAFBOutputs.amplifyfigmamymakefile11359sandbox36a0e11795storageweddingGuestPhotosBucketBE1AA233Ref": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795storageNestedStackstorageNestedStackResource83ADAAFBOutputsamplifyfigmamymakefile11359sandbox36a0e11795storageweddingGuestPhotosBucketBE1AA233Ref"
+    }
+  ],
+  "/amplify-figmamymakefile-11359-sandbox-36a0e11795/function/amplifyfigmamymakefile11359sandbox36a0e11795functionguestphotouploadlambda290FD85BRef": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "amplifyfigmamymakefile11359sandbox36a0e11795functionguestphotouploadlambda290FD85BRef"
+    }
+  ],
+  "/amplify-figmamymakefile-11359-sandbox-36a0e11795/function/amplifyfigmamymakefile11359sandbox36a0e11795functionguestphotouploadlambdaFunctionUrlD7AD23BAFunctionUrl": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "amplifyfigmamymakefile11359sandbox36a0e11795functionguestphotouploadlambdaFunctionUrlD7AD23BAFunctionUrl"
+    }
+  ],
+  "/amplify-figmamymakefile-11359-sandbox-36a0e11795/function.NestedStack/function.NestedStackResource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "function1351588B"
+    }
+  ],
   "/amplify-figmamymakefile-11359-sandbox-36a0e11795/storage/Custom::S3AutoDeleteObjectsCustomResourceProvider": [
     {
       "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
       "data": true
+    }
+  ],
+  "/amplify-figmamymakefile-11359-sandbox-36a0e11795/storage/amplifyfigmamymakefile11359sandbox36a0e11795storageweddingGuestPhotosBucketBE1AA233Arn": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "amplifyfigmamymakefile11359sandbox36a0e11795storageweddingGuestPhotosBucketBE1AA233Arn"
+    }
+  ],
+  "/amplify-figmamymakefile-11359-sandbox-36a0e11795/storage/amplifyfigmamymakefile11359sandbox36a0e11795storageweddingGuestPhotosBucketBE1AA233Ref": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "amplifyfigmamymakefile11359sandbox36a0e11795storageweddingGuestPhotosBucketBE1AA233Ref"
     }
   ],
   "/amplify-figmamymakefile-11359-sandbox-36a0e11795/storage/reference-to-amplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputs.amplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthunauthenticatedUserRoleF53949CBRef": [
@@ -390,12 +444,6 @@
     {
       "type": "aws:cdk:logicalId",
       "data": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthADMINSGroupRole4D74D7F1Ref"
-    }
-  ],
-  "/amplify-figmamymakefile-11359-sandbox-36a0e11795/storage/amplifyfigmamymakefile11359sandbox36a0e11795storageweddingGuestPhotosBucketBE1AA233Ref": [
-    {
-      "type": "aws:cdk:logicalId",
-      "data": "amplifyfigmamymakefile11359sandbox36a0e11795storageweddingGuestPhotosBucketBE1AA233Ref"
     }
   ],
   "/amplify-figmamymakefile-11359-sandbox-36a0e11795/storage.NestedStack/storage.NestedStackResource": [
@@ -507,6 +555,36 @@
     }
   ],
   "/amplify-figmamymakefile-11359-sandbox-36a0e11795/data/CDKMetadata/Condition": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CDKMetadataAvailable"
+    }
+  ],
+  "/amplify-figmamymakefile-11359-sandbox-36a0e11795/function/guest-photo-upload-lambda/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "guestphotouploadlambda2EB1A0D5"
+    }
+  ],
+  "/amplify-figmamymakefile-11359-sandbox-36a0e11795/function/guest-photo-upload-lambda/invoke-function-url": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "guestphotouploadlambdainvokefunctionurl926D4E43"
+    }
+  ],
+  "/amplify-figmamymakefile-11359-sandbox-36a0e11795/function/guest-photo-upload-lambda/invoke-function": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "guestphotouploadlambdainvokefunctionF6D88341"
+    }
+  ],
+  "/amplify-figmamymakefile-11359-sandbox-36a0e11795/function/CDKMetadata/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CDKMetadata"
+    }
+  ],
+  "/amplify-figmamymakefile-11359-sandbox-36a0e11795/function/CDKMetadata/Condition": [
     {
       "type": "aws:cdk:logicalId",
       "data": "CDKMetadataAvailable"
@@ -1072,6 +1150,18 @@
     {
       "type": "aws:cdk:logicalId",
       "data": "modelIntrospectionSchemaBucketDeploymentCustomResource1536MiB104B97EC"
+    }
+  ],
+  "/amplify-figmamymakefile-11359-sandbox-36a0e11795/function/guest-photo-upload-lambda/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "guestphotouploadlambdaServiceRole6D457C47"
+    }
+  ],
+  "/amplify-figmamymakefile-11359-sandbox-36a0e11795/function/guest-photo-upload-lambda/FunctionUrl/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "guestphotouploadlambdaFunctionUrl78DA2385"
     }
   ],
   "/amplify-figmamymakefile-11359-sandbox-36a0e11795/storage/weddingGuestPhotos/Bucket/Resource": [
@@ -1726,6 +1816,12 @@
     {
       "type": "aws:cdk:logicalId",
       "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1536MiBServiceRoleDefaultPolicyFF1C635B"
+    }
+  ],
+  "/amplify-figmamymakefile-11359-sandbox-36a0e11795/function/guest-photo-upload-lambda/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "guestphotouploadlambdaServiceRoleDefaultPolicy7B538D66"
     }
   ],
   "/amplify-figmamymakefile-11359-sandbox-36a0e11795/storage/weddingGuestPhotos/Bucket/Policy/Resource": [

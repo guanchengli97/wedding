@@ -13,22 +13,23 @@
        "AllowedMethods": [
         "GET",
         "HEAD",
-        "PUT",
-        "POST",
-        "DELETE"
+        "PUT"
        ],
        "AllowedOrigins": [
         "*"
        ],
        "ExposedHeaders": [
-        "x-amz-server-side-encryption",
-        "x-amz-request-id",
-        "x-amz-id-2",
         "ETag"
        ],
        "MaxAge": 3000
       }
      ]
+    },
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": false,
+     "BlockPublicPolicy": false,
+     "IgnorePublicAcls": false,
+     "RestrictPublicBuckets": false
     },
     "Tags": [
      {
@@ -135,6 +136,27 @@
          ]
         }
        ]
+      },
+      {
+       "Action": "s3:GetObject",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "*"
+       },
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "weddingGuestPhotosBucketC3F1729D",
+            "Arn"
+           ]
+          },
+          "/guest-photos/*"
+         ]
+        ]
+       }
       }
      ],
      "Version": "2012-10-17"
@@ -428,7 +450,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/5WNTU/DMAyGf8t6Ts3oQELctnFm1XpECGWpqdw2iRS721CU/466SBSOnPxaz/tRQfXwCOuVvnBp2qEc6QTxFVmwbUSbQekLf0TeQNxNZkBR+0+X1VssLF3JFc/F7/Ds5w3cEEO2bifxLzii4OHUoxEu0rvKqPYjma+lNf//6M6BRrSgRXerTorZQmwkkOtqHbRFwTBv/DxJkbYQl/WsUlL7icXbI7KfgsEZLfoPqoM/U4thpxnVlhmlEd2R65JyvkXo+e5cVXD/BOtVz0RlmJyQRTjm+w0TNfmAegEAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/5VNTWvDMAz9Lc3Z0Uq6XXZru/MWmuMYw3W0oCS2wZLbDeP/PlLDsh0HAr3H+2qguX+A7UZfuTb9VM90hvSMLNh3os2k9JXfE+8gHaKZUNTxwxX0mipLn+Sqx+p3ePHzDm4SQ7Huo/gnnFHw5TyiEa7ymypS62cyX2tr4f/oLoFOtKBFd6vOitlC6iSQG1odtEXBsGz8kKxIW0jrekE5q2Nk8faE7GMwuEgr/iO1wV+ox3DQjGrPjNKJHsgNWTnfI4x8d2m2sNxmZKI6RCdkEU7lfwP8QFGUegEAAA=="
    },
    "Metadata": {
     "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/storage/CDKMetadata/Default"
@@ -702,19 +724,27 @@
    ]
   }
  },
+ "Outputs": {
+  "amplifyfigmamymakefile11359sandbox36a0e11795storageweddingGuestPhotosBucketBE1AA233Arn": {
+   "Value": {
+    "Fn::GetAtt": [
+     "weddingGuestPhotosBucketC3F1729D",
+     "Arn"
+    ]
+   }
+  },
+  "amplifyfigmamymakefile11359sandbox36a0e11795storageweddingGuestPhotosBucketBE1AA233Ref": {
+   "Value": {
+    "Ref": "weddingGuestPhotosBucketC3F1729D"
+   }
+  }
+ },
  "Parameters": {
   "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthunauthenticatedUserRoleF53949CBRef": {
    "Type": "String"
   },
   "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthADMINSGroupRole4D74D7F1Ref": {
    "Type": "String"
-  }
- },
- "Outputs": {
-  "amplifyfigmamymakefile11359sandbox36a0e11795storageweddingGuestPhotosBucketBE1AA233Ref": {
-   "Value": {
-    "Ref": "weddingGuestPhotosBucketC3F1729D"
-   }
   }
  }
 }

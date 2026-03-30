@@ -368,7 +368,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/12LywrCMBBFv6X7dKxBwa10IW5EKq4lJqNOmybSTC0S8u9SpCqu7rkvCXKxhCJTQ8i1aXJLZ4g7DIzmwEo3Qg3hFLW/OmIP8Riw23tvRXlxH56gtISOf6tvsjXomPg5nX995S2umZW+tX//Tef7exKkWojjauxGTSkJ5w1CHWYPKWG+giKrA1He9Y6pRaje+gITuPbr3wAAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/11L3QqCMBR+Fu/nSaQeILyIbiKMrmNtpzo6N3HHJMbePUZYEnzw/ZdQrjdQZHLyudJtbugK4YCeUZ9YqlbIyV+CcndL7CCcPQ5H54yobvarZ1EZQsvL6pfsNVomfs3npa+dwS2zVI/u778b3NhHQbKDkFapSxxjFNZphMavnmUBCVnjifJhtEwdQv3hN/zNXv/fAAAA"
    },
    "Metadata": {
     "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/auth/CDKMetadata/Default"

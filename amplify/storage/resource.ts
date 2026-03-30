@@ -4,6 +4,9 @@ export const storage = defineStorage({
   name: "weddingGuestPhotos",
   isDefault: true,
   access: (allow) => ({
-    "guest-photos/*": [allow.guest.to(["read", "write"]), allow.groups(["ADMINS"]).to(["read", "write", "delete"])],
+    "guest-photos/*": [
+      allow.guest.to(["read", "write"]),
+      allow.groups(["ADMINS"]).to(["read", "write", "delete"]),
+    ],
   }),
 });

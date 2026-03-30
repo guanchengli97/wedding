@@ -241,7 +241,15 @@ export function RSVPAdmin() {
 
       const resolvedPhotos = await Promise.all(
         (data ?? []).map(async (photo) => {
-          const url = photo.storagePath ? (await getUrl({ path: photo.storagePath })).url.toString() : null;
+          let url: string | null = null;
+
+          if (photo.storagePath) {
+            try {
+              url = (await getUrl({ path: photo.storagePath })).url.toString();
+            } catch {
+              url = null;
+            }
+          }
 
           return {
             id: photo.id,

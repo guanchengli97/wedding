@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Heart, ImageUp, LoaderCircle, MessageSquareQuote } from "lucide-react";
-import { getUrl, uploadData } from "aws-amplify/storage";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useLanguage } from "../i18n";
-import { amplifyConfigured, client } from "../../lib/amplify";
+import { amplifyConfigured, publicClient } from "../../lib/amplify";
+import outputs from "../../../amplify_outputs.json";
 import img5178 from "../../assets/gallery/IMG_5178.JPEG";
 import img9589 from "../../assets/gallery/IMG_9589.JPEG";
 import img9089 from "../../assets/gallery/IMG_9089.JPEG";
@@ -26,6 +26,30 @@ type GuestPhotoCard = {
   originalFileName?: string | null;
   createdAt?: string | null;
 };
+
+function buildPublicGuestPhotoUrl(storagePath?: string | null) {
+  if (!storagePath) {
+    return null;
+  }
+
+  const bucketName = outputs.storage?.bucket_name;
+  const region = outputs.storage?.aws_region;
+  if (!bucketName || !region) {
+    return null;
+  }
+
+  const encodedPath = storagePath
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+
+  return `https://${bucketName}.s3.${region}.amazonaws.com/${encodedPath}`;
+}
+
+function getGuestPhotoUploadUrl() {
+  const custom = (outputs as { custom?: { guestPhotoUploadUrl?: string } }).custom;
+  return custom?.guestPhotoUploadUrl ?? "";
+}
 
 export function Gallery() {
   const { language } = useLanguage();
@@ -99,12 +123,11 @@ export function Gallery() {
       setLoadingGuestPhotos(true);
 
       try {
-        const { data, errors } = await client.models.GuestPhoto.list(
+        const { data, errors } = await publicClient.models.GuestPhoto.list(
           {
             limit: 100,
             selectionSet: ["id", "storagePath", "originalFileName", "uploaderName", "message", "createdAt"],
           },
-          { authMode: "apiKey" },
         );
 
         if (errors?.length) {
@@ -113,11 +136,9 @@ export function Gallery() {
 
         const resolvedPhotos = await Promise.all(
           (data ?? []).map(async (photo) => {
-            const url = photo.storagePath ? (await getUrl({ path: photo.storagePath })).url.toString() : null;
-
             return {
               id: photo.id,
-              url,
+              url: buildPublicGuestPhotoUrl(photo.storagePath),
               uploaderName: photo.uploaderName,
               message: photo.message,
               originalFileName: photo.originalFileName,
@@ -164,24 +185,58 @@ export function Gallery() {
     setUploading(true);
 
     try {
+      const uploadEndpoint = getGuestPhotoUploadUrl();
+      if (files.length && !uploadEndpoint) {
+        throw new Error(content.uploadMissingConfig);
+      }
+
       const uploadedCards = await Promise.all(
         (files.length ? files : [null]).map(async (file) => {
           let storagePath: string | undefined;
 
           if (file) {
-            const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
-            storagePath = `guest-photos/${Date.now()}-${crypto.randomUUID()}-${safeName}`;
-
-            await uploadData({
-              path: storagePath,
-              data: file,
-              options: {
-                contentType: file.type || undefined,
+            const uploadResponse = await fetch(uploadEndpoint, {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
               },
-            }).result;
+              body: JSON.stringify({
+                contentType: file.type || undefined,
+                originalFileName: file.name,
+              }),
+            });
+
+            if (!uploadResponse.ok) {
+              const detail = await uploadResponse.text();
+              throw new Error(`Upload URL request failed (${uploadResponse.status})${detail ? `: ${detail}` : ""}`);
+            }
+
+            const uploadPayload = (await uploadResponse.json()) as {
+              storagePath?: string;
+              uploadUrl?: string;
+            };
+
+            if (!uploadPayload.storagePath || !uploadPayload.uploadUrl) {
+              throw new Error(content.uploadFailed);
+            }
+
+            storagePath = uploadPayload.storagePath;
+
+            const putResponse = await fetch(uploadPayload.uploadUrl, {
+              method: "PUT",
+              headers: {
+                "content-type": file.type || "application/octet-stream",
+              },
+              body: file,
+            });
+
+            if (!putResponse.ok) {
+              const detail = await putResponse.text();
+              throw new Error(`Photo upload failed (${putResponse.status})${detail ? `: ${detail}` : ""}`);
+            }
           }
 
-          const { data, errors } = await client.models.GuestPhoto.create(
+          const { data, errors } = await publicClient.models.GuestPhoto.create(
             {
               storagePath,
               originalFileName: file?.name,
@@ -189,7 +244,6 @@ export function Gallery() {
               message: trimmedMessage || undefined,
             },
             {
-              authMode: "apiKey",
               selectionSet: ["id", "storagePath", "originalFileName", "uploaderName", "message", "createdAt"],
             },
           );
@@ -198,11 +252,9 @@ export function Gallery() {
             throw new Error(errors?.[0]?.message || content.uploadFailed);
           }
 
-          const url = storagePath ? (await getUrl({ path: storagePath })).url.toString() : null;
-
           return {
             id: data.id,
-            url,
+            url: buildPublicGuestPhotoUrl(storagePath),
             uploaderName: data.uploaderName,
             message: data.message,
             originalFileName: data.originalFileName,
