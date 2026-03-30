@@ -5,6 +5,7 @@ import { OurStory } from "./components/OurStory";
 import { WeddingDetails } from "./components/WeddingDetails";
 import { RSVP } from "./components/RSVP";
 import { Gallery } from "./components/Gallery";
+import { RSVPAdmin } from "./components/RSVPAdmin";
 
 export const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ export const router = createBrowserRouter([
       { path: "our-story", Component: OurStory },
       { path: "details", Component: WeddingDetails },
       { path: "rsvp", Component: RSVP },
+      { path: "rsvp-admin", Component: RSVPAdmin },
       { path: "gallery", Component: Gallery },
     ],
   },

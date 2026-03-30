@@ -3,69 +3,116 @@ import { useState } from "react";
 import { Heart, Users, Mail, Phone, MessageSquare } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useLanguage } from "../i18n";
+import { amplifyConfigured, client } from "../../lib/amplify";
+
+const initialFormData = {
+  fullName: "",
+  email: "",
+  phone: "",
+  guests: "1",
+  attendance: "yes",
+  arrivalInfo: "",
+  songRequest: "",
+  message: "",
+};
 
 export function RSVP() {
   const { language } = useLanguage();
   const isZh = language === "zh";
 
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    guests: "1",
-    attendance: "yes",
-    arrivalInfo: "",
-    songRequest: "",
-    message: "",
-  });
-
+  const [formData, setFormData] = useState(initialFormData);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const content = {
     heroAlt: isZh ? "婚礼晚宴" : "Wedding reception",
     title: "RSVP",
     subtitle: isZh ? "期待与你相聚" : "We hope you can join us",
     deadline: isZh ? "请于 2026 年 5 月 1 日前回复" : "Please Respond by May 1, 2026",
-    intro: isZh ? "我们很期待与你一起庆祝，请告诉我们你是否能出席。" : "We're so excited to celebrate with you! Please let us know if you can make it.",
+    intro: isZh
+      ? "我们很期待与你一起庆祝，请告诉我们你是否能够出席。"
+      : "We're so excited to celebrate with you! Please let us know if you can make it.",
     thanksTitle: isZh ? "谢谢你" : "Thank You!",
-    thanksBody: isZh ? "我们已收到你的回复，期待在婚礼上见到你。" : "Your RSVP has been received. We can't wait to celebrate with you!",
+    thanksBody: isZh
+      ? "我们已收到你的回复，期待在婚礼上见到你。"
+      : "Your RSVP has been received. We can't wait to celebrate with you!",
     fullName: isZh ? "姓名 *" : "Full Name *",
     fullNamePlaceholder: isZh ? "请输入你的姓名" : "Enter your full name",
-    email: isZh ? "邮箱 *" : "Email Address *",
+    email: isZh ? "邮箱" : "Email Address",
     emailPlaceholder: "your@email.com",
     phone: isZh ? "电话号码" : "Phone Number",
-    phonePlaceholder: isZh ? "请输入电话号码" : "(555) 555-5555",
-    attendance: isZh ? "是否出席？ *" : "Will you be attending? *",
+    phonePlaceholder: isZh ? "请输入你的电话号码" : "(555) 555-5555",
+    attendance: isZh ? "是否出席？*" : "Will you be attending? *",
     accept: isZh ? "欣然出席" : "Joyfully Accepts",
     decline: isZh ? "遗憾缺席" : "Regretfully Declines",
     guests: isZh ? "出席人数 *" : "Number of Guests *",
     guestOne: isZh ? "1 位宾客" : "1 Guest",
     guestTwo: isZh ? "2 位宾客" : "2 Guests",
     arrivalInfo: isZh ? "到达车站或机场及时间" : "Arrival Station or Airport and Time",
-    arrivalInfoPlaceholder: isZh ? "例如：商丘站，5月1日 20:30 到达" : "For example: Shangqiu Station, arriving on May 1 at 8:30 PM",
+    arrivalInfoPlaceholder: isZh
+      ? "例如：商丘站，5 月 1 日 20:30 到达"
+      : "For example: Shangqiu Station, arriving on May 1 at 8:30 PM",
     song: isZh ? "点歌" : "Song Request",
     songPlaceholder: isZh ? "有喜欢的歌曲吗？" : "Any favorite songs?",
     message: isZh ? "给新人的留言" : "Message to the Couple",
     messagePlaceholder: isZh ? "写下你的祝福..." : "Share your well wishes...",
     submit: isZh ? "提交回复" : "Submit RSVP",
+    submitting: isZh ? "提交中..." : "Submitting...",
+    submitError: isZh ? "提交失败，请稍后重试。" : "Submission failed. Please try again.",
+    missingConfig: isZh
+      ? "表单尚未连接到 AWS Amplify Data。请先运行 Amplify sandbox 或部署后端。"
+      : "This form is not connected to AWS Amplify Data yet. Run Amplify sandbox or deploy the backend first.",
     updateTitle: isZh ? "想更新 RSVP？" : "Need to Update Your RSVP?",
-    updateBody: isZh ? "如果行程有变化，请尽快联系我们，以便我们更新宾客名单。" : "If your plans change, please contact us as soon as possible so we can update our guest list.",
-    contact: isZh ? "联系我们" : "Contact Us",
+    updateBody: isZh
+      ? "如果行程有变化，请尽快联系我们，以便我们更新宾客名单。"
+      : "If your plans change, please contact us as soon as possible so we can update our guest list.",
+    contact: isZh ? "打开微信" : "Open WeChat",
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-    }, 5000);
+    setSubmitError("");
+
+    if (!amplifyConfigured) {
+      setSubmitError(content.missingConfig);
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { errors } = await client.models.RSVP.create({
+        fullName: formData.fullName.trim(),
+        email: formData.email.trim() || undefined,
+        phone: formData.phone.trim() || undefined,
+        guestCount: formData.attendance === "yes" ? Number(formData.guests) : 0,
+        attending: formData.attendance === "yes",
+        arrivalInfo: formData.arrivalInfo.trim() || undefined,
+        songRequest: formData.songRequest.trim() || undefined,
+        message: formData.message.trim() || undefined,
+        language,
+      }, { authMode: "apiKey" });
+
+      if (errors?.length) {
+        throw new Error(errors[0].message);
+      }
+
+      setSubmitted(true);
+      setFormData(initialFormData);
+    } catch (error) {
+      const message = error instanceof Error && error.message ? error.message : content.submitError;
+      setSubmitError(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
+    setFormData((current) => ({
+      ...current,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   return (
@@ -268,11 +315,14 @@ export function RSVP() {
                   </div>
                 </div>
 
+                {submitError ? <p className="text-sm text-[#b85c5c]">{submitError}</p> : null}
+
                 <button
                   type="submit"
-                  className="w-full py-4 bg-[#b8997a] text-white hover:bg-[#a07d5f] transition-colors tracking-wider uppercase"
+                  disabled={isSubmitting}
+                  className="w-full py-4 bg-[#b8997a] text-white hover:bg-[#a07d5f] disabled:opacity-60 disabled:cursor-not-allowed transition-colors tracking-wider uppercase"
                 >
-                  {content.submit}
+                  {isSubmitting ? content.submitting : content.submit}
                 </button>
               </form>
             )}
