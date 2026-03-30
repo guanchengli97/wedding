@@ -1,6 +1,18 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { RefreshCw, Users, Mail, Phone, CalendarDays, LogOut, ShieldCheck, KeyRound } from "lucide-react";
+import {
+  CalendarDays,
+  KeyRound,
+  LogOut,
+  Mail,
+  Pencil,
+  Phone,
+  RefreshCw,
+  Save,
+  ShieldCheck,
+  Users,
+  X,
+} from "lucide-react";
 import { confirmSignIn, fetchAuthSession, getCurrentUser, signIn, signOut } from "aws-amplify/auth";
 import { client } from "../../lib/amplify";
 import { useLanguage } from "../i18n";
@@ -19,6 +31,18 @@ type RSVPRecord = {
   createdAt?: string | null;
 };
 
+type RSVPDraft = {
+  fullName: string;
+  email: string;
+  phone: string;
+  guestCount: number;
+  attending: boolean;
+  arrivalInfo: string;
+  songRequest: string;
+  message: string;
+  language: string;
+};
+
 type AdminUser = {
   username: string;
   groups: string[];
@@ -26,10 +50,49 @@ type AdminUser = {
 
 type AuthStep = "signIn" | "newPassword";
 
+function createDraft(record: RSVPRecord): RSVPDraft {
+  return {
+    fullName: record.fullName,
+    email: record.email ?? "",
+    phone: record.phone ?? "",
+    guestCount: record.guestCount,
+    attending: record.attending,
+    arrivalInfo: record.arrivalInfo ?? "",
+    songRequest: record.songRequest ?? "",
+    message: record.message ?? "",
+    language: record.language ?? "",
+  };
+}
+
+function normalizeDraft(draft: RSVPDraft): RSVPDraft {
+  const attending = draft.attending;
+
+  return {
+    fullName: draft.fullName.trim(),
+    email: draft.email.trim(),
+    phone: draft.phone.trim(),
+    guestCount: attending ? Math.max(1, Number(draft.guestCount) || 1) : 0,
+    attending,
+    arrivalInfo: draft.arrivalInfo.trim(),
+    songRequest: draft.songRequest.trim(),
+    message: draft.message.trim(),
+    language: draft.language.trim(),
+  };
+}
+
+function draftsEqual(left: RSVPDraft, right: RSVPDraft) {
+  return JSON.stringify(normalizeDraft(left)) === JSON.stringify(normalizeDraft(right));
+}
+
 export function RSVPAdmin() {
   const { language } = useLanguage();
   const isZh = language === "zh";
   const [records, setRecords] = useState<RSVPRecord[]>([]);
+  const [drafts, setDrafts] = useState<Record<string, RSVPDraft>>({});
+  const [editingById, setEditingById] = useState<Record<string, boolean>>({});
+  const [savingById, setSavingById] = useState<Record<string, boolean>>({});
+  const [saveErrorById, setSaveErrorById] = useState<Record<string, string>>({});
+  const [saveSuccessById, setSaveSuccessById] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [authLoading, setAuthLoading] = useState(true);
@@ -42,7 +105,7 @@ export function RSVPAdmin() {
 
   const content = {
     title: isZh ? "RSVP 管理" : "RSVP Admin",
-    subtitle: isZh ? "查看已提交的回复记录" : "Review submitted responses",
+    subtitle: isZh ? "查看回复，并按需进入编辑" : "Review responses and edit only when needed",
     refresh: isZh ? "刷新" : "Refresh",
     loading: isZh ? "正在加载 RSVP 记录..." : "Loading RSVP records...",
     error: isZh ? "读取 RSVP 失败。" : "Failed to load RSVP records.",
@@ -59,19 +122,37 @@ export function RSVPAdmin() {
     noValue: isZh ? "未填写" : "Not provided",
     groups: isZh ? "用户组" : "Groups",
     signInTitle: isZh ? "管理员登录" : "Admin Sign In",
-    signInBody: isZh ? "请使用 Cognito 管理员账号登录后查看 RSVP 数据。" : "Sign in with your Cognito admin account to view RSVP data.",
+    signInBody: isZh
+      ? "请使用 Cognito 管理员账号登录后查看和编辑 RSVP 数据。"
+      : "Sign in with your Cognito admin account to view and edit RSVP data.",
     emailLabel: isZh ? "邮箱" : "Email",
     passwordLabel: isZh ? "密码" : "Password",
     signIn: isZh ? "登录" : "Sign In",
     signingIn: isZh ? "登录中..." : "Signing In...",
     signOut: isZh ? "退出登录" : "Sign Out",
     forbidden: isZh ? "当前账号不在 ADMINS 组，无法查看 RSVP 数据。" : "This account is not in the ADMINS group and cannot view RSVP data.",
-    challengeUnsupported: isZh ? "当前账号需要额外 Cognito 登录步骤，当前页面暂不支持该挑战类型。" : "This account requires an additional Cognito sign-in step that this page does not support.",
+    challengeUnsupported: isZh
+      ? "当前账号需要额外的 Cognito 登录步骤，当前页面暂不支持该挑战类型。"
+      : "This account requires an additional Cognito sign-in step that this page does not support.",
     newPasswordTitle: isZh ? "设置新密码" : "Set a New Password",
-    newPasswordBody: isZh ? "这是你的首次登录。请先设置一个新密码，然后继续进入 RSVP 管理页。" : "This is your first sign-in. Set a new password to continue to the RSVP admin page.",
+    newPasswordBody: isZh
+      ? "这是你的首次登录。请先设置一个新密码，然后继续进入 RSVP 管理页。"
+      : "This is your first sign-in. Set a new password to continue to the RSVP admin page.",
     newPasswordLabel: isZh ? "新密码" : "New password",
     confirmNewPassword: isZh ? "提交新密码" : "Submit New Password",
     confirmingNewPassword: isZh ? "提交中..." : "Submitting...",
+    fullName: isZh ? "姓名" : "Full name",
+    attendance: isZh ? "是否出席" : "Attendance",
+    attendeeInfo: isZh ? "宾客信息" : "Guest details",
+    responseInfo: isZh ? "回复内容" : "Response details",
+    guestCountHint: isZh ? "缺席时人数会自动设为 0。" : "Guest count becomes 0 when not attending.",
+    edit: isZh ? "编辑" : "Edit",
+    cancel: isZh ? "取消" : "Cancel",
+    save: isZh ? "保存" : "Save",
+    saving: isZh ? "保存中..." : "Saving...",
+    saved: isZh ? "已保存" : "Saved",
+    saveFailed: isZh ? "保存失败。" : "Failed to save changes.",
+    requiredName: isZh ? "姓名不能为空。" : "Full name is required.",
   };
 
   const loadRecords = async () => {
@@ -79,10 +160,7 @@ export function RSVPAdmin() {
     setError("");
 
     try {
-      const { data, errors } = await client.models.RSVP.list(
-        { limit: 1000 },
-        { authMode: "userPool" },
-      );
+      const { data, errors } = await client.models.RSVP.list({ limit: 1000 }, { authMode: "userPool" });
 
       if (errors?.length) {
         throw new Error(errors[0].message);
@@ -95,6 +173,15 @@ export function RSVPAdmin() {
       });
 
       setRecords(sorted);
+      setDrafts(
+        sorted.reduce<Record<string, RSVPDraft>>((accumulator, record) => {
+          accumulator[record.id] = createDraft(record);
+          return accumulator;
+        }, {}),
+      );
+      setEditingById({});
+      setSaveErrorById({});
+      setSaveSuccessById({});
     } catch (err) {
       setError(err instanceof Error && err.message ? err.message : content.error);
     } finally {
@@ -199,11 +286,134 @@ export function RSVPAdmin() {
     await signOut();
     setAdminUser(null);
     setRecords([]);
+    setDrafts({});
+    setEditingById({});
     setError("");
     setAuthError("");
     setAuthStep("signIn");
     setPassword("");
     setNewPassword("");
+    setSaveErrorById({});
+    setSaveSuccessById({});
+  };
+
+  const updateDraft = (recordId: string, updater: (current: RSVPDraft) => RSVPDraft) => {
+    setDrafts((current) => {
+      const draft = current[recordId];
+      if (!draft) {
+        return current;
+      }
+
+      return {
+        ...current,
+        [recordId]: updater(draft),
+      };
+    });
+
+    setSaveErrorById((current) => ({ ...current, [recordId]: "" }));
+    setSaveSuccessById((current) => ({ ...current, [recordId]: "" }));
+  };
+
+  const openEditor = (record: RSVPRecord) => {
+    setDrafts((current) => ({
+      ...current,
+      [record.id]: createDraft(record),
+    }));
+    setEditingById((current) => ({
+      ...current,
+      [record.id]: true,
+    }));
+    setSaveErrorById((current) => ({ ...current, [record.id]: "" }));
+    setSaveSuccessById((current) => ({ ...current, [record.id]: "" }));
+  };
+
+  const handleCancel = (record: RSVPRecord) => {
+    setDrafts((current) => ({
+      ...current,
+      [record.id]: createDraft(record),
+    }));
+    setEditingById((current) => ({ ...current, [record.id]: false }));
+    setSaveErrorById((current) => ({ ...current, [record.id]: "" }));
+    setSaveSuccessById((current) => ({ ...current, [record.id]: "" }));
+  };
+
+  const handleSave = async (record: RSVPRecord) => {
+    const currentDraft = drafts[record.id];
+    if (!currentDraft) {
+      return;
+    }
+
+    const normalizedDraft = normalizeDraft(currentDraft);
+    const baselineDraft = createDraft(record);
+
+    if (!normalizedDraft.fullName) {
+      setSaveErrorById((current) => ({
+        ...current,
+        [record.id]: content.requiredName,
+      }));
+      return;
+    }
+
+    const updateInput: {
+      id: string;
+      fullName?: string;
+      email?: string | null;
+      phone?: string | null;
+      guestCount?: number;
+      attending?: boolean;
+      arrivalInfo?: string | null;
+      songRequest?: string | null;
+      message?: string | null;
+      language?: string | null;
+    } = { id: record.id };
+
+    if (normalizedDraft.fullName !== baselineDraft.fullName) updateInput.fullName = normalizedDraft.fullName;
+    if (normalizedDraft.email !== baselineDraft.email) updateInput.email = normalizedDraft.email || null;
+    if (normalizedDraft.phone !== baselineDraft.phone) updateInput.phone = normalizedDraft.phone || null;
+    if (normalizedDraft.guestCount !== baselineDraft.guestCount) updateInput.guestCount = normalizedDraft.guestCount;
+    if (normalizedDraft.attending !== baselineDraft.attending) updateInput.attending = normalizedDraft.attending;
+    if (normalizedDraft.arrivalInfo !== baselineDraft.arrivalInfo) updateInput.arrivalInfo = normalizedDraft.arrivalInfo || null;
+    if (normalizedDraft.songRequest !== baselineDraft.songRequest) updateInput.songRequest = normalizedDraft.songRequest || null;
+    if (normalizedDraft.message !== baselineDraft.message) updateInput.message = normalizedDraft.message || null;
+    if (normalizedDraft.language !== baselineDraft.language) updateInput.language = normalizedDraft.language || null;
+
+    setSavingById((current) => ({ ...current, [record.id]: true }));
+    setSaveErrorById((current) => ({ ...current, [record.id]: "" }));
+    setSaveSuccessById((current) => ({ ...current, [record.id]: "" }));
+
+    try {
+      const { errors } = await client.models.RSVP.update(updateInput, {
+        authMode: "userPool",
+        selectionSet: ["id", "fullName", "guestCount", "attending", "language", "createdAt"],
+      });
+
+      if (errors?.length) {
+        throw new Error(errors[0].message);
+      }
+
+      const updatedRecord: RSVPRecord = {
+        ...record,
+        ...normalizedDraft,
+      };
+
+      setRecords((current) => current.map((item) => (item.id === record.id ? updatedRecord : item)));
+      setDrafts((current) => ({
+        ...current,
+        [record.id]: createDraft(updatedRecord),
+      }));
+      setEditingById((current) => ({ ...current, [record.id]: false }));
+      setSaveSuccessById((current) => ({
+        ...current,
+        [record.id]: content.saved,
+      }));
+    } catch (err) {
+      setSaveErrorById((current) => ({
+        ...current,
+        [record.id]: err instanceof Error && err.message ? err.message : content.saveFailed,
+      }));
+    } finally {
+      setSavingById((current) => ({ ...current, [record.id]: false }));
+    }
   };
 
   if (authLoading && !adminUser) {
@@ -347,60 +557,240 @@ export function RSVPAdmin() {
         {!loading && !error && records.length === 0 ? <p className="text-[#6b6256]">{content.empty}</p> : null}
 
         <div className="grid gap-6">
-          {records.map((record, index) => (
-            <motion.div
-              key={record.id}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35, delay: index * 0.03 }}
-              className="bg-white border border-[#eadccd] p-6"
-            >
-              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
-                <div>
-                  <h2 className="text-2xl text-[#4a4238]" style={{ fontFamily: "var(--font-serif)" }}>
-                    {record.fullName}
-                  </h2>
-                  <p className="text-[#b8997a] mt-1">
-                    {record.attending ? content.yes : content.no} · {content.guests}: {record.guestCount}
-                  </p>
-                </div>
-                <div className="text-sm text-[#8a7e70] flex items-center gap-2">
-                  <CalendarDays className="w-4 h-4" />
-                  <span>
-                    {content.submittedAt}: {record.createdAt ? new Date(record.createdAt).toLocaleString() : content.noValue}
-                  </span>
-                </div>
-              </div>
+          {records.map((record, index) => {
+            const draft = drafts[record.id] ?? createDraft(record);
+            const isEditing = editingById[record.id] ?? false;
+            const isSaving = savingById[record.id] ?? false;
+            const saveError = saveErrorById[record.id];
+            const saveSuccess = saveSuccessById[record.id];
+            const isDirty = !draftsEqual(draft, createDraft(record));
 
-              <div className="grid md:grid-cols-2 gap-4 text-[#6b6256]">
-                <div className="flex items-start gap-3">
-                  <Mail className="w-4 h-4 mt-1 text-[#b8997a]" />
-                  <span>{record.email || content.noValue}</span>
+            return (
+              <motion.div
+                key={record.id}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.35, delay: index * 0.03 }}
+                className="bg-white border border-[#eadccd] p-6"
+              >
+                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
+                  <div>
+                    <h2 className="text-2xl text-[#4a4238]" style={{ fontFamily: "var(--font-serif)" }}>
+                      {record.fullName}
+                    </h2>
+                    <p className="text-[#b8997a] mt-1">
+                      {record.attending ? content.yes : content.no} · {content.guests}: {record.guestCount}
+                    </p>
+                  </div>
+                  <div className="text-sm text-[#8a7e70] flex items-center gap-2">
+                    <CalendarDays className="w-4 h-4" />
+                    <span>
+                      {content.submittedAt}: {record.createdAt ? new Date(record.createdAt).toLocaleString() : content.noValue}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <Phone className="w-4 h-4 mt-1 text-[#b8997a]" />
-                  <span>{record.phone || content.noValue}</span>
-                </div>
-                <div>
-                  <p className="text-sm uppercase tracking-[0.15em] text-[#8a7e70] mb-1">{content.arrivalInfo}</p>
-                  <p>{record.arrivalInfo || content.noValue}</p>
-                </div>
-                <div>
-                  <p className="text-sm uppercase tracking-[0.15em] text-[#8a7e70] mb-1">{content.songRequest}</p>
-                  <p>{record.songRequest || content.noValue}</p>
-                </div>
-                <div className="md:col-span-2">
-                  <p className="text-sm uppercase tracking-[0.15em] text-[#8a7e70] mb-1">{content.message}</p>
-                  <p>{record.message || content.noValue}</p>
-                </div>
-                <div>
-                  <p className="text-sm uppercase tracking-[0.15em] text-[#8a7e70] mb-1">{content.language}</p>
-                  <p>{record.language || content.noValue}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+
+                {isEditing ? (
+                  <div className="grid gap-6">
+                    <div>
+                      <p className="text-sm uppercase tracking-[0.15em] text-[#8a7e70] mb-3">{content.attendeeInfo}</p>
+                      <div className="grid md:grid-cols-2 gap-4 text-[#6b6256]">
+                        <div>
+                          <label htmlFor={`fullName-${record.id}`} className="block mb-2 text-[#4a4238]">{content.fullName}</label>
+                          <input
+                            id={`fullName-${record.id}`}
+                            type="text"
+                            value={draft.fullName}
+                            onChange={(event) => updateDraft(record.id, (current) => ({ ...current, fullName: event.target.value }))}
+                            className="w-full px-4 py-3 border border-[#e8d5c4] bg-[#fdfbf8] focus:outline-none focus:border-[#b8997a] transition-colors"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor={`language-${record.id}`} className="block mb-2 text-[#4a4238]">{content.language}</label>
+                          <input
+                            id={`language-${record.id}`}
+                            type="text"
+                            value={draft.language}
+                            onChange={(event) => updateDraft(record.id, (current) => ({ ...current, language: event.target.value }))}
+                            className="w-full px-4 py-3 border border-[#e8d5c4] bg-[#fdfbf8] focus:outline-none focus:border-[#b8997a] transition-colors"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor={`email-${record.id}`} className="block mb-2 text-[#4a4238]">{content.emailLabel}</label>
+                          <div className="relative">
+                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#b8997a]" />
+                            <input
+                              id={`email-${record.id}`}
+                              type="email"
+                              value={draft.email}
+                              onChange={(event) => updateDraft(record.id, (current) => ({ ...current, email: event.target.value }))}
+                              className="w-full pl-10 pr-4 py-3 border border-[#e8d5c4] bg-[#fdfbf8] focus:outline-none focus:border-[#b8997a] transition-colors"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label htmlFor={`phone-${record.id}`} className="block mb-2 text-[#4a4238]">{content.phone}</label>
+                          <div className="relative">
+                            <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#b8997a]" />
+                            <input
+                              id={`phone-${record.id}`}
+                              type="text"
+                              value={draft.phone}
+                              onChange={(event) => updateDraft(record.id, (current) => ({ ...current, phone: event.target.value }))}
+                              className="w-full pl-10 pr-4 py-3 border border-[#e8d5c4] bg-[#fdfbf8] focus:outline-none focus:border-[#b8997a] transition-colors"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-sm uppercase tracking-[0.15em] text-[#8a7e70] mb-3">{content.responseInfo}</p>
+                      <div className="grid md:grid-cols-2 gap-4 text-[#6b6256]">
+                        <div>
+                          <label htmlFor={`attending-${record.id}`} className="block mb-2 text-[#4a4238]">{content.attendance}</label>
+                          <select
+                            id={`attending-${record.id}`}
+                            value={draft.attending ? "yes" : "no"}
+                            onChange={(event) => updateDraft(record.id, (current) => {
+                              const attending = event.target.value === "yes";
+                              return { ...current, attending, guestCount: attending ? Math.max(1, current.guestCount || 1) : 0 };
+                            })}
+                            className="w-full px-4 py-3 border border-[#e8d5c4] bg-[#fdfbf8] focus:outline-none focus:border-[#b8997a] transition-colors"
+                          >
+                            <option value="yes">{content.yes}</option>
+                            <option value="no">{content.no}</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label htmlFor={`guestCount-${record.id}`} className="block mb-2 text-[#4a4238]">{content.guests}</label>
+                          <input
+                            id={`guestCount-${record.id}`}
+                            type="number"
+                            min={draft.attending ? 1 : 0}
+                            value={draft.guestCount}
+                            disabled={!draft.attending}
+                            onChange={(event) => updateDraft(record.id, (current) => ({ ...current, guestCount: Number(event.target.value) }))}
+                            className="w-full px-4 py-3 border border-[#e8d5c4] bg-[#fdfbf8] focus:outline-none focus:border-[#b8997a] transition-colors disabled:opacity-60"
+                          />
+                          <p className="text-xs text-[#8a7e70] mt-2">{content.guestCountHint}</p>
+                        </div>
+                        <div>
+                          <label htmlFor={`arrivalInfo-${record.id}`} className="block mb-2 text-[#4a4238]">{content.arrivalInfo}</label>
+                          <textarea
+                            id={`arrivalInfo-${record.id}`}
+                            rows={3}
+                            value={draft.arrivalInfo}
+                            onChange={(event) => updateDraft(record.id, (current) => ({ ...current, arrivalInfo: event.target.value }))}
+                            className="w-full px-4 py-3 border border-[#e8d5c4] bg-[#fdfbf8] focus:outline-none focus:border-[#b8997a] transition-colors resize-y"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor={`songRequest-${record.id}`} className="block mb-2 text-[#4a4238]">{content.songRequest}</label>
+                          <textarea
+                            id={`songRequest-${record.id}`}
+                            rows={3}
+                            value={draft.songRequest}
+                            onChange={(event) => updateDraft(record.id, (current) => ({ ...current, songRequest: event.target.value }))}
+                            className="w-full px-4 py-3 border border-[#e8d5c4] bg-[#fdfbf8] focus:outline-none focus:border-[#b8997a] transition-colors resize-y"
+                          />
+                        </div>
+                        <div className="md:col-span-2">
+                          <label htmlFor={`message-${record.id}`} className="block mb-2 text-[#4a4238]">{content.message}</label>
+                          <textarea
+                            id={`message-${record.id}`}
+                            rows={4}
+                            value={draft.message}
+                            onChange={(event) => updateDraft(record.id, (current) => ({ ...current, message: event.target.value }))}
+                            className="w-full px-4 py-3 border border-[#e8d5c4] bg-[#fdfbf8] focus:outline-none focus:border-[#b8997a] transition-colors resize-y"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-t border-[#f0e5d9] pt-4">
+                      <div className="min-h-6">
+                        {saveError ? <p className="text-sm text-[#b85c5c]">{saveError}</p> : null}
+                        {!saveError && saveSuccess ? <p className="text-sm text-[#61805a]">{saveSuccess}</p> : null}
+                      </div>
+                      <div className="flex gap-3">
+                        <button
+                          type="button"
+                          disabled={isSaving}
+                          onClick={() => handleCancel(record)}
+                          className="inline-flex items-center gap-2 px-4 py-2 border border-[#d8c9b8] text-[#6b6256] hover:bg-[#eee5dc] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+                        >
+                          <X className="w-4 h-4" />
+                          {content.cancel}
+                        </button>
+                        <button
+                          type="button"
+                          disabled={!isDirty || isSaving}
+                          onClick={() => void handleSave(record)}
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-[#b8997a] text-white hover:bg-[#a07d5f] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+                        >
+                          <Save className="w-4 h-4" />
+                          {isSaving ? content.saving : content.save}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid gap-6">
+                    <div>
+                      <p className="text-sm uppercase tracking-[0.15em] text-[#8a7e70] mb-3">{content.attendeeInfo}</p>
+                      <div className="grid md:grid-cols-2 gap-4 text-[#6b6256]">
+                        <div className="flex items-start gap-3">
+                          <Mail className="w-4 h-4 mt-1 text-[#b8997a]" />
+                          <span>{record.email || content.noValue}</span>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <Phone className="w-4 h-4 mt-1 text-[#b8997a]" />
+                          <span>{record.phone || content.noValue}</span>
+                        </div>
+                        <div>
+                          <p className="text-sm uppercase tracking-[0.15em] text-[#8a7e70] mb-1">{content.language}</p>
+                          <p>{record.language || content.noValue}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-sm uppercase tracking-[0.15em] text-[#8a7e70] mb-3">{content.responseInfo}</p>
+                      <div className="grid md:grid-cols-2 gap-4 text-[#6b6256]">
+                        <div>
+                          <p className="text-sm uppercase tracking-[0.15em] text-[#8a7e70] mb-1">{content.arrivalInfo}</p>
+                          <p>{record.arrivalInfo || content.noValue}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm uppercase tracking-[0.15em] text-[#8a7e70] mb-1">{content.songRequest}</p>
+                          <p>{record.songRequest || content.noValue}</p>
+                        </div>
+                        <div className="md:col-span-2">
+                          <p className="text-sm uppercase tracking-[0.15em] text-[#8a7e70] mb-1">{content.message}</p>
+                          <p>{record.message || content.noValue}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-t border-[#f0e5d9] pt-4">
+                      <div className="min-h-6">
+                        {saveError ? <p className="text-sm text-[#b85c5c]">{saveError}</p> : null}
+                        {!saveError && saveSuccess ? <p className="text-sm text-[#61805a]">{saveSuccess}</p> : null}
+                      </div>
+                      <div className="flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => openEditor(record)}
+                          className="inline-flex items-center gap-2 px-4 py-2 border border-[#b8997a] text-[#b8997a] hover:bg-[#b8997a] hover:text-white transition-colors"
+                        >
+                          <Pencil className="w-4 h-4" />
+                          {content.edit}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </div>

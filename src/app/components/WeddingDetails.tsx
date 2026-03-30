@@ -6,6 +6,11 @@ import { useLanguage } from "../i18n";
 export function WeddingDetails() {
   const { language } = useLanguage();
   const isZh = language === "zh";
+  const ceremonyVenueName = isZh ? "华景粤海酒店" : "Huajing Yuehai Hotel";
+  const ceremonyVenueAddress = isZh
+    ? "河南省商丘市柘城县北关大街湖南路1号"
+    : "No. 1 Hunan Road, Beiguan Street, Zhecheng County, Shangqiu, Henan, China";
+  const ceremonyAmapUrl = `https://m.amap.com/?k=${encodeURIComponent(`${ceremonyVenueName} ${ceremonyVenueAddress}`)}`;
 
   const schedule = isZh
     ? [
@@ -77,7 +82,7 @@ export function WeddingDetails() {
     sameVenue: isZh ? "与仪式场地相同" : "Same venue as ceremony",
     celebration: isZh ? "用餐与庆祝时光" : "Dining and celebration",
     getDirections: isZh ? "获取路线" : "Get Directions",
-    viewMenu: isZh ? "查看菜单" : "View Menu",
+    viewMenu: isZh ? "查看菜单（Coming soon）" : "View Menu",
     scheduleTitle: isZh ? "流程安排" : "Schedule",
     scheduleSub: isZh ? "婚礼当天时间线" : "Timeline for our special day",
     goodToKnow: isZh ? "贴心提示" : "Good to Know",
@@ -144,14 +149,19 @@ export function WeddingDetails() {
                 <div className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 mt-1 flex-shrink-0 text-[#b8997a]" />
                   <div>
-                    <p className="font-medium">{isZh ? "华景粤海酒店" : "Huajing Yuehai Hotel"}</p>
-                    <p>{isZh ? "河南省商丘市柘城县北关大街湖南路1号" : "No. 1 Hunan Road, Beiguan Street, Zhecheng County, Shangqiu, Henan, China"}</p>
+                    <p className="font-medium">{ceremonyVenueName}</p>
+                    <p>{ceremonyVenueAddress}</p>
                   </div>
                 </div>
               </div>
-              <button className="mt-8 w-full py-3 bg-[#b8997a] text-white hover:bg-[#a07d5f] transition-colors tracking-wider uppercase text-sm">
+              <a
+                href={ceremonyAmapUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-8 flex w-full items-center justify-center py-3 bg-[#b8997a] text-white hover:bg-[#a07d5f] transition-colors tracking-wider uppercase text-sm"
+              >
                 {content.getDirections}
-              </button>
+              </a>
             </motion.div>
 
             <motion.div
@@ -178,7 +188,7 @@ export function WeddingDetails() {
                 <div className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 mt-1 flex-shrink-0 text-[#b8997a]" />
                   <div>
-                    <p className="font-medium">{isZh ? "华景粤海酒店" : "Huajing Yuehai Hotel"}</p>
+                    <p className="font-medium">{ceremonyVenueName}</p>
                     {/* <p>{content.sameVenue}</p> */}
                     <p>{content.celebration}</p>
                   </div>

@@ -13,7 +13,10 @@ const schema = a.schema({
       message: a.string(),
       language: a.string().required(),
     })
-    .authorization((allow) => [allow.publicApiKey().to(["create"]), allow.group("ADMINS").to(["read"])]),
+    .authorization((allow) => [
+      allow.publicApiKey().to(["create"]),
+      allow.group("ADMINS").to(["read", "update"]),
+    ]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
