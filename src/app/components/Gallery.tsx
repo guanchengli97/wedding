@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { Heart, ImageUp, LoaderCircle } from "lucide-react";
+import { Heart, ImageUp, LoaderCircle, MessageSquareQuote } from "lucide-react";
 import { getUrl, uploadData } from "aws-amplify/storage";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useLanguage } from "../i18n";
@@ -20,10 +20,10 @@ import gliu3382 from "../../assets/gallery/GLIU3382.JPEG";
 
 type GuestPhotoCard = {
   id: string;
-  url: string;
+  url?: string | null;
   uploaderName?: string | null;
   message?: string | null;
-  originalFileName: string;
+  originalFileName?: string | null;
   createdAt?: string | null;
 };
 
@@ -58,32 +58,34 @@ export function Gallery() {
     title: isZh ? "婚礼相册" : "Our Gallery",
     subtitle: isZh ? "珍藏的每一刻" : "Moments we cherish",
     quote: isZh ? "“爱，是一个灵魂栖息在两个身体里。”" : '"Love is composed of a single soul inhabiting two bodies."',
-    shareTitle: isZh ? "上传你的照片" : "Upload Your Photos",
+    shareTitle: isZh ? "上传照片或留言" : "Share a Photo or Message",
     shareSub: isZh
-      ? "欢迎把你拍到的婚礼瞬间上传到这里，我们也想从你的视角看看这一天。"
-      : "Upload the moments you captured so we can see the wedding through your eyes too.",
+      ? "有照片就上传照片，也可以只留一句祝福。两者任意一个有内容就可以提交。"
+      : "Upload a photo, leave a note, or do both. Either one is enough to submit.",
     uploaderName: isZh ? "你的名字" : "Your name",
     uploaderNamePlaceholder: isZh ? "可选" : "Optional",
-    message: isZh ? "评论" : "Message",
+    message: isZh ? "留言" : "Message",
     messagePlaceholder: isZh ? "可选，给新人留一句祝福..." : "Optional, leave a note for the couple...",
     choosePhotos: isZh ? "选择照片" : "Choose photos",
-    uploadPhotos: isZh ? "上传照片" : "Upload Photos",
-    uploading: isZh ? "上传中..." : "Uploading...",
+    uploadPhotos: isZh ? "提交" : "Submit",
+    uploading: isZh ? "提交中..." : "Submitting...",
     uploadHint: isZh
-      ? "支持一次上传多张照片，图片会保存到 S3，并连同留言一起显示在下方。"
-      : "You can upload multiple photos at once. They will be stored in S3 and shown below with your message.",
+      ? "支持一次上传多张照片；如果不上传照片，也可以只提交留言。"
+      : "You can upload multiple photos at once, or submit just a message without a photo.",
     uploadMissingConfig: isZh
       ? "图片上传功能还没有连接到 Amplify 后端。请先启动 sandbox 或部署后端。"
       : "Photo upload is not connected to the Amplify backend yet. Start sandbox or deploy the backend first.",
-    uploadMissingFiles: isZh ? "请先选择至少一张照片。" : "Choose at least one photo first.",
-    uploadSuccess: isZh ? "照片上传成功。" : "Photos uploaded successfully.",
-    uploadFailed: isZh ? "照片上传失败，请稍后重试。" : "Photo upload failed. Please try again.",
-    uploadedPhotosTitle: isZh ? "宾客上传的照片" : "Guest Uploaded Photos",
-    uploadedPhotosSub: isZh ? "你们上传的照片和留言会出现在这里。" : "Photos and notes uploaded by guests will appear here.",
-    uploadedEmpty: isZh ? "还没有宾客上传照片，等你来第一张。" : "No guest photos yet. Be the first to upload one.",
+    uploadMissingContent: isZh ? "请至少上传一张照片或填写一条留言。" : "Add at least one photo or a message first.",
+    uploadSuccess: isZh ? "内容提交成功。" : "Your upload was submitted successfully.",
+    uploadFailed: isZh ? "提交失败，请稍后重试。" : "Submission failed. Please try again.",
+    uploadedPhotosTitle: isZh ? "宾客分享" : "Guest Shares",
+    uploadedPhotosSub: isZh ? "宾客上传的照片和留言会出现在这里。" : "Photos and notes uploaded by guests will appear here.",
+    uploadedEmpty: isZh ? "还没有宾客分享，等你来第一条。" : "No guest shares yet. Be the first to post.",
     uploadedBy: isZh ? "上传者" : "Uploaded by",
+    photoFile: isZh ? "照片文件" : "Photo file",
+    messageOnly: isZh ? "仅留言" : "Message only",
     noValue: isZh ? "未填写" : "Not provided",
-    loadingUploads: isZh ? "正在加载宾客照片..." : "Loading guest photos...",
+    loadingUploads: isZh ? "正在加载宾客内容..." : "Loading guest uploads...",
     comingSoonTitle: isZh ? "更多照片即将上线" : "More Photos Coming Soon",
     comingSoonSub: isZh ? "婚礼当天的专业摄影作品也会在婚礼后补充到这里。" : "Professional wedding photos will also be added here after the big day.",
   };
@@ -111,13 +113,11 @@ export function Gallery() {
 
         const resolvedPhotos = await Promise.all(
           (data ?? []).map(async (photo) => {
-            const { url } = await getUrl({
-              path: photo.storagePath,
-            });
+            const url = photo.storagePath ? (await getUrl({ path: photo.storagePath })).url.toString() : null;
 
             return {
               id: photo.id,
-              url: url.toString(),
+              url,
               uploaderName: photo.uploaderName,
               message: photo.message,
               originalFileName: photo.originalFileName,
@@ -153,8 +153,11 @@ export function Gallery() {
       return;
     }
 
-    if (!selectedFiles?.length) {
-      setUploadError(content.uploadMissingFiles);
+    const trimmedMessage = guestMessage.trim();
+    const files = selectedFiles ? Array.from(selectedFiles) : [];
+
+    if (!files.length && !trimmedMessage) {
+      setUploadError(content.uploadMissingContent);
       return;
     }
 
@@ -162,24 +165,28 @@ export function Gallery() {
 
     try {
       const uploadedCards = await Promise.all(
-        Array.from(selectedFiles).map(async (file) => {
-          const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
-          const storagePath = `guest-photos/${Date.now()}-${crypto.randomUUID()}-${safeName}`;
+        (files.length ? files : [null]).map(async (file) => {
+          let storagePath: string | undefined;
 
-          await uploadData({
-            path: storagePath,
-            data: file,
-            options: {
-              contentType: file.type || undefined,
-            },
-          }).result;
+          if (file) {
+            const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
+            storagePath = `guest-photos/${Date.now()}-${crypto.randomUUID()}-${safeName}`;
+
+            await uploadData({
+              path: storagePath,
+              data: file,
+              options: {
+                contentType: file.type || undefined,
+              },
+            }).result;
+          }
 
           const { data, errors } = await client.models.GuestPhoto.create(
             {
               storagePath,
-              originalFileName: file.name,
+              originalFileName: file?.name,
               uploaderName: uploaderName.trim() || undefined,
-              message: guestMessage.trim() || undefined,
+              message: trimmedMessage || undefined,
             },
             {
               authMode: "apiKey",
@@ -191,11 +198,11 @@ export function Gallery() {
             throw new Error(errors?.[0]?.message || content.uploadFailed);
           }
 
-          const { url } = await getUrl({ path: storagePath });
+          const url = storagePath ? (await getUrl({ path: storagePath })).url.toString() : null;
 
           return {
             id: data.id,
-            url: url.toString(),
+            url,
             uploaderName: data.uploaderName,
             message: data.message,
             originalFileName: data.originalFileName,
@@ -312,7 +319,6 @@ export function Gallery() {
                     className="w-full px-4 py-3 border border-[#e8d5c4] bg-white focus:outline-none focus:border-[#b8997a] transition-colors"
                   />
                 </div>
-                
                 <div>
                   <label htmlFor="guest-photo-upload" className="block mb-2 text-[#4a4238]">
                     {content.choosePhotos}
@@ -367,27 +373,42 @@ export function Gallery() {
 
             {guestPhotos.length ? (
               <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 lg:gap-6">
-                {guestPhotos.map((photo, index) => (
-                  <motion.div
-                    key={photo.id}
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.35, delay: index * 0.04 }}
-                    className="overflow-hidden border border-[#eadccd] bg-white"
-                  >
-                    <ImageWithFallback src={photo.url} alt={photo.originalFileName} className="h-40 w-full object-cover sm:h-56 md:h-72" />
-                    <div className="p-4">
-                      <p className="text-[#4a4238] break-words">{photo.originalFileName}</p>
-                      <p className="mt-2 text-sm text-[#8a7e70]">
-                        {content.uploadedBy}: {photo.uploaderName || content.noValue}
-                      </p>
-                      <p className="mt-2 text-sm text-[#6b6256] break-words">
-                        {content.message}: {photo.message || content.noValue}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
+                {guestPhotos.map((photo, index) => {
+                  const hasPhoto = Boolean(photo.url);
+
+                  return (
+                    <motion.div
+                      key={photo.id}
+                      initial={{ opacity: 0, y: 16 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.35, delay: index * 0.04 }}
+                      className="overflow-hidden border border-[#eadccd] bg-white"
+                    >
+                      {hasPhoto ? (
+                        <ImageWithFallback
+                          src={photo.url ?? ""}
+                          alt={photo.originalFileName || content.messageOnly}
+                          className="h-40 w-full object-cover sm:h-56 md:h-72"
+                        />
+                      ) : (
+                        <div className="flex min-h-40 flex-col justify-center gap-4 bg-[#f8f2ea] p-6 text-[#4a4238] sm:min-h-56 md:min-h-72">
+                          <MessageSquareQuote className="h-8 w-8 text-[#b8997a]" />
+                          <p className="text-lg leading-relaxed break-words">{photo.message || content.noValue}</p>
+                        </div>
+                      )}
+                      <div className="p-4">
+                        <p className="text-[#4a4238] break-words">{photo.originalFileName || content.messageOnly}</p>
+                        <p className="mt-2 text-sm text-[#8a7e70]">
+                          {content.uploadedBy}: {photo.uploaderName || content.noValue}
+                        </p>
+                        <p className="mt-2 text-sm text-[#6b6256] break-words">
+                          {content.message}: {photo.message || content.noValue}
+                        </p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </div>
             ) : null}
           </div>

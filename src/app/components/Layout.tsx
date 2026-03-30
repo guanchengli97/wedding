@@ -15,7 +15,7 @@ export function Layout() {
     { path: "/our-story", label: language === "zh" ? "我们的故事" : "Our Story" },
     { path: "/details", label: language === "zh" ? "婚礼信息" : "Details" },
     { path: "/rsvp", label: "RSVP" },
-    { path: "/gallery", label: language === "zh" ? "相册" : "Gallery" },
+    { path: "/gallery", label: language === "zh" ? "相册和留言" : "Gallery" },
   ];
 
   const footerText = {

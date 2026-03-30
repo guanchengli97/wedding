@@ -19,8 +19,8 @@ const schema = a.schema({
     ]),
   GuestPhoto: a
     .model({
-      storagePath: a.string().required(),
-      originalFileName: a.string().required(),
+      storagePath: a.string(),
+      originalFileName: a.string(),
       uploaderName: a.string(),
       message: a.string(),
     })

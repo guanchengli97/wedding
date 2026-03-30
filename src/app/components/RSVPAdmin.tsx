@@ -54,9 +54,9 @@ type AdminUser = {
 
 type GuestPhotoRecord = {
   id: string;
-  url: string;
-  storagePath: string;
-  originalFileName: string;
+  url?: string | null;
+  storagePath?: string | null;
+  originalFileName?: string | null;
   uploaderName?: string | null;
   message?: string | null;
   createdAt?: string | null;
@@ -241,11 +241,11 @@ export function RSVPAdmin() {
 
       const resolvedPhotos = await Promise.all(
         (data ?? []).map(async (photo) => {
-          const { url } = await getUrl({ path: photo.storagePath });
+          const url = photo.storagePath ? (await getUrl({ path: photo.storagePath })).url.toString() : null;
 
           return {
             id: photo.id,
-            url: url.toString(),
+            url,
             storagePath: photo.storagePath,
             originalFileName: photo.originalFileName,
             uploaderName: photo.uploaderName,
@@ -535,7 +535,9 @@ export function RSVPAdmin() {
     try {
       await Promise.all(
         photosToDelete.map(async (photo) => {
-          await remove({ path: photo.storagePath });
+          if (photo.storagePath) {
+            await remove({ path: photo.storagePath });
+          }
 
           const { errors } = await client.models.GuestPhoto.delete({ id: photo.id }, { authMode: "userPool" });
 
@@ -736,24 +738,30 @@ export function RSVPAdmin() {
                     }`}
                   >
                     <div className="relative">
-                      <ImageWithFallback
-                        src={photo.url}
-                        alt={photo.originalFileName}
-                        className="h-40 w-full object-cover sm:h-48"
-                      />
+                      {photo.url ? (
+                        <ImageWithFallback
+                          src={photo.url}
+                          alt={photo.originalFileName || content.message}
+                          className="h-40 w-full object-cover sm:h-48"
+                        />
+                      ) : (
+                        <div className="flex h-40 items-center justify-center bg-[#f8f2ea] p-4 text-center text-sm text-[#6b6256] sm:h-48">
+                          {photo.message || content.noValue}
+                        </div>
+                      )}
                       <div className="absolute left-3 top-3 rounded-full bg-white/90 px-2 py-1 text-xs text-[#4a4238]">
                         <input
                           type="checkbox"
                           checked={isSelected}
                           onChange={() => toggleGuestPhotoSelection(photo.id)}
                           className="mr-2 align-middle"
-                          aria-label={`${content.selectPhoto}: ${photo.originalFileName}`}
+                          aria-label={`${content.selectPhoto}: ${photo.originalFileName || photo.message || photo.id}`}
                         />
                         {content.selectPhoto}
                       </div>
                     </div>
                     <div className="p-3 text-sm text-[#6b6256]">
-                      <p className="break-words text-[#4a4238]">{photo.originalFileName}</p>
+                      <p className="break-words text-[#4a4238]">{photo.originalFileName || content.noValue}</p>
                       <p className="mt-1">
                         {content.uploadedBy}: {photo.uploaderName || content.noValue}
                       </p>

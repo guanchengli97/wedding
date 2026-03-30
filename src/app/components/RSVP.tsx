@@ -49,7 +49,7 @@ export function RSVP() {
     guests: isZh ? "出席人数 *" : "Number of Guests *",
     guestOne: isZh ? "1 位宾客" : "1 Guest",
     guestTwo: isZh ? "2 位宾客" : "2 Guests",
-    arrivalInfo: isZh ? "到达车站或机场及时间" : "Arrival Station or Airport and Time",
+    arrivalInfo: isZh ? "到达车站或机场及时间（可提供接机服务）" : "Arrival Station or Airport and Time (We can arrange pickup)",
     arrivalInfoPlaceholder: isZh
       ? "例如：商丘站，5 月 1 日 20:30 到达"
       : "For example: Shangqiu Station, arriving on May 1 at 8:30 PM",

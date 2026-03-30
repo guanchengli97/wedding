@@ -187,14 +187,14 @@
               "name": "storagePath",
               "isArray": false,
               "type": "String",
-              "isRequired": true,
+              "isRequired": false,
               "attributes": []
             },
             "originalFileName": {
               "name": "originalFileName",
               "isArray": false,
               "type": "String",
-              "isRequired": true,
+              "isRequired": false,
               "attributes": []
             },
             "uploaderName": {

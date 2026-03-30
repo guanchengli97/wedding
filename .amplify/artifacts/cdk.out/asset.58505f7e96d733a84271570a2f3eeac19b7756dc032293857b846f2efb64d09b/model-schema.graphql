@@ -1,0 +1,22 @@
+type RSVP @model @auth(rules: [{allow: public, provider: apiKey, operations: [create]},
+  {allow: groups, operations: [read, update], groups: ["ADMINS"]}])
+{
+  fullName: String!
+  email: String
+  phone: String
+  guestCount: Int!
+  attending: Boolean!
+  arrivalInfo: String
+  songRequest: String
+  message: String
+  language: String!
+}
+
+type GuestPhoto @model @auth(rules: [{allow: public, provider: apiKey, operations: [create, read]},
+  {allow: groups, operations: [read, update, delete], groups: ["ADMINS"]}])
+{
+  storagePath: String
+  originalFileName: String
+  uploaderName: String
+  message: String
+}
