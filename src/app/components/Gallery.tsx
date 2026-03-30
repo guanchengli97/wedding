@@ -2,6 +2,18 @@ import { motion } from "motion/react";
 import { Heart } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useLanguage } from "../i18n";
+import img5178 from "../../assets/gallery/IMG_5178.JPEG";
+import img9589 from "../../assets/gallery/IMG_9589.JPEG";
+import img9089 from "../../assets/gallery/IMG_9089.JPEG";
+import img7189 from "../../assets/gallery/IMG_7189.JPEG";
+import gliu3296 from "../../assets/gallery/GLIU3296.JPEG";
+import img4087 from "../../assets/gallery/IMG_4087.JPEG";
+import dscf8031 from "../../assets/gallery/DSCF8031.JPEG";
+import img96a930 from "../../assets/gallery/96a930344a805c0cbd56695c91edfee6.JPEG";
+import dsf6050 from "../../assets/gallery/_DSF6050.JPEG";
+import img0004 from "../../assets/gallery/IMG_0004.JPEG";
+import img7197 from "../../assets/gallery/IMG_7197.JPEG";
+import gliu3382 from "../../assets/gallery/GLIU3382.JPEG";
 
 export function Gallery() {
   const { language } = useLanguage();
@@ -9,33 +21,63 @@ export function Gallery() {
 
   const photos = [
     {
-      url: "https://images.unsplash.com/photo-1768900044120-650653953a6a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVnYW50JTIwd2VkZGluZyUyMGNvdXBsZSUyMHBvcnRyYWl0fGVufDF8fHx8MTc3NDUzMTc4OHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      alt: isZh ? "Sophie 和 James 的合照" : "Sophie and James portrait",
+      url: img5178,
+      alt: isZh ? "山顶风景合照" : "Mountain overlook photo",
       span: "md:col-span-2 md:row-span-2",
     },
     {
-      url: "https://images.unsplash.com/photo-1757589227072-0dd17af42433?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwdmVudWUlMjBjZXJlbW9ueSUyMGZsb3dlcnN8ZW58MXx8fHwxNzc0NTgxNTc3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      alt: isZh ? "婚礼场地" : "Wedding venue",
+      url: img9589,
+      alt: isZh ? "大峡谷自拍" : "Grand canyon selfie",
       span: "",
     },
     {
-      url: "https://images.unsplash.com/photo-1567022936601-6f279a36e5e7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwYm91cXVldCUyMGZsb3dlcnMlMjBpdm9yeXxlbnwxfHx8fDE3NzQ1ODE1Nzh8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      alt: isZh ? "婚礼花束" : "Wedding bouquet",
+      url: img9089,
+      alt: isZh ? "海边日落合影" : "Sunset pier selfie",
       span: "",
     },
     {
-      url: "https://images.unsplash.com/photo-1773845596855-ede4d0499206?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyb21hbnRpYyUyMGNvdXBsZSUyMHdhbGtpbmclMjBzdW5zZXR8ZW58MXx8fHwxNzc0NTgxNTc4fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      alt: isZh ? "浪漫散步" : "Romantic walk",
+      url: img7189,
+      alt: isZh ? "节日街头合照" : "Festival street photo",
       span: "md:col-span-2",
     },
     {
-      url: "https://images.unsplash.com/photo-1738694242379-ef21044985bb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwcmluZ3MlMjBnb2xkJTIwZWxlZ2FudHxlbnwxfHx8fDE3NzQ1MTk2Njh8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      alt: isZh ? "婚戒" : "Wedding rings",
+      url: gliu3296,
+      alt: isZh ? "婚礼出门照" : "Wedding doorway portrait",
       span: "",
     },
     {
-      url: "https://images.unsplash.com/photo-1768777270882-9f74939fee50?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwcmVjZXB0aW9uJTIwdGFibGUlMjBlbGVnYW50fGVufDF8fHx8MTc3NDU4MTU3OHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      alt: isZh ? "宴会布置" : "Reception table",
+      url: img4087,
+      alt: isZh ? "富士山日出" : "Mount Fuji at sunrise",
+      span: "",
+    },
+    {
+      url: dscf8031,
+      alt: isZh ? "云雾山景" : "Cloudy mountain landscape",
+      span: "",
+    },
+    {
+      url: img96a930,
+      alt: isZh ? "海边依靠" : "Couple by the sea",
+      span: "md:row-span-2",
+    },
+    {
+      url: dsf6050,
+      alt: isZh ? "背影看海" : "Ocean view from behind",
+      span: "",
+    },
+    {
+      url: img0004,
+      alt: isZh ? "小猫玉米" : "Cat portrait",
+      span: "",
+    },
+    {
+      url: img7197,
+      alt: isZh ? "马里奥约会日" : "Mario themed date photo",
+      span: "",
+    },
+    {
+      url: gliu3382,
+      alt: isZh ? "婚礼回望照" : "Wedding look-back portrait",
       span: "",
     },
   ];
@@ -43,7 +85,7 @@ export function Gallery() {
   const content = {
     title: isZh ? "婚礼相册" : "Our Gallery",
     subtitle: isZh ? "珍藏的每一刻" : "Moments we cherish",
-    quote: isZh ? "“爱，是一个灵魂栖居在两个身体里。”" : '"Love is composed of a single soul inhabiting two bodies."',
+    quote: isZh ? "“爱，是一个灵魂栖息在两个身体里。”" : '"Love is composed of a single soul inhabiting two bodies."',
     shareTitle: isZh ? "分享你的照片" : "Share Your Photos",
     shareSub: isZh ? "我们也想从你的视角看见这场婚礼，欢迎在 Instagram 分享照片。" : "We'd love to see the wedding through your eyes! Share your photos with us on Instagram.",
     hashtagLabel: isZh ? "使用我们的婚礼话题" : "Use our wedding hashtag",

@@ -293,7 +293,7 @@ export function RSVP() {
             </h3>
             <p className="text-[#6b6256] mb-6">{content.updateBody}</p>
             <a
-              href="mailto:sophie.james.wedding@email.com"
+              href="weixin://dl/chat"
               className="inline-block px-8 py-3 border-2 border-[#b8997a] text-[#b8997a] hover:bg-[#b8997a] hover:text-white transition-all duration-300 tracking-wider uppercase text-sm"
             >
               {content.contact}
