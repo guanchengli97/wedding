@@ -17,6 +17,16 @@ const schema = a.schema({
       allow.publicApiKey().to(["create"]),
       allow.group("ADMINS").to(["read", "update"]),
     ]),
+  GuestPhoto: a
+    .model({
+      storagePath: a.string().required(),
+      originalFileName: a.string().required(),
+      uploaderName: a.string(),
+    })
+    .authorization((allow) => [
+      allow.publicApiKey().to(["create", "read"]),
+      allow.group("ADMINS").to(["read", "update", "delete"]),
+    ]),
 });
 
 export type Schema = ClientSchema<typeof schema>;

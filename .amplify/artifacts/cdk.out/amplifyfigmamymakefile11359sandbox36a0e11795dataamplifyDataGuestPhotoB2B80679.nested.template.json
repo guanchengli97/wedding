@@ -1,0 +1,2080 @@
+{
+ "Parameters": {
+  "DynamoDBModelTableReadIOPS": {
+   "Type": "Number",
+   "Default": 5,
+   "Description": "The number of read IOPS the table should support."
+  },
+  "DynamoDBModelTableWriteIOPS": {
+   "Type": "Number",
+   "Default": 5,
+   "Description": "The number of write IOPS the table should support."
+  },
+  "DynamoDBBillingMode": {
+   "Type": "String",
+   "Default": "PAY_PER_REQUEST",
+   "AllowedValues": [
+    "PAY_PER_REQUEST",
+    "PROVISIONED"
+   ],
+   "Description": "Configure @model types to create DynamoDB tables with PAY_PER_REQUEST or PROVISIONED billing modes."
+  },
+  "DynamoDBEnablePointInTimeRecovery": {
+   "Type": "String",
+   "Default": "false",
+   "AllowedValues": [
+    "true",
+    "false"
+   ],
+   "Description": "Whether to enable Point in Time Recovery on the table."
+  },
+  "DynamoDBEnableServerSideEncryption": {
+   "Type": "String",
+   "Default": "true",
+   "AllowedValues": [
+    "true",
+    "false"
+   ],
+   "Description": "Enable server side encryption powered by KMS."
+  },
+  "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataAmplifyTableManagerNestedStackAmplifyTableManagerNestedStackResource4F981FE8Outputsamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataAmplifyTableManagerTableMana3E98A42C": {
+   "Type": "String"
+  },
+  "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId": {
+   "Type": "String"
+  },
+  "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName": {
+   "Type": "String"
+  },
+  "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthauthenticatedUserRoleC48C0855Ref": {
+   "Type": "String"
+  },
+  "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthunauthenticatedUserRoleF53949CBRef": {
+   "Type": "String"
+  },
+  "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthIdentityPool6E04CF60Ref": {
+   "Type": "String"
+  }
+ },
+ "Conditions": {
+  "HasEnvironmentParameter": {
+   "Fn::Not": [
+    {
+     "Fn::Equals": [
+      "NONE",
+      "NONE"
+     ]
+    }
+   ]
+  },
+  "ShouldUsePayPerRequestBilling": {
+   "Fn::Equals": [
+    {
+     "Ref": "DynamoDBBillingMode"
+    },
+    "PAY_PER_REQUEST"
+   ]
+  },
+  "ShouldUsePointInTimeRecovery": {
+   "Fn::Equals": [
+    {
+     "Ref": "DynamoDBEnablePointInTimeRecovery"
+    },
+    "true"
+   ]
+  },
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-3"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-4"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "il-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Equals": [
+      {
+       "Ref": "AWS::Region"
+      },
+      "us-west-2"
+     ]
+    }
+   ]
+  }
+ },
+ "Resources": {
+  "GuestPhotoTable": {
+   "Type": "Custom::AmplifyDynamoDBTable",
+   "Properties": {
+    "ServiceToken": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataAmplifyTableManagerNestedStackAmplifyTableManagerNestedStackResource4F981FE8Outputsamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataAmplifyTableManagerTableMana3E98A42C"
+    },
+    "tableName": {
+     "Fn::Join": [
+      "",
+      [
+       "GuestPhoto-",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+       },
+       "-NONE"
+      ]
+     ]
+    },
+    "attributeDefinitions": [
+     {
+      "attributeName": "id",
+      "attributeType": "S"
+     }
+    ],
+    "keySchema": [
+     {
+      "attributeName": "id",
+      "keyType": "HASH"
+     }
+    ],
+    "provisionedThroughput": {
+     "Fn::If": [
+      "ShouldUsePayPerRequestBilling",
+      {
+       "Ref": "AWS::NoValue"
+      },
+      {
+       "ReadCapacityUnits": {
+        "Ref": "DynamoDBModelTableReadIOPS"
+       },
+       "WriteCapacityUnits": {
+        "Ref": "DynamoDBModelTableWriteIOPS"
+       }
+      }
+     ]
+    },
+    "sseSpecification": {
+     "sseEnabled": false
+    },
+    "streamSpecification": {
+     "streamViewType": "NEW_AND_OLD_IMAGES"
+    },
+    "deletionProtectionEnabled": false,
+    "allowDestructiveGraphqlSchemaUpdates": true,
+    "replaceTableUponGsiUpdate": true,
+    "pointInTimeRecoverySpecification": {
+     "Fn::If": [
+      "ShouldUsePointInTimeRecovery",
+      {
+       "PointInTimeRecoveryEnabled": true
+      },
+      {
+       "Ref": "AWS::NoValue"
+      }
+     ]
+    },
+    "billingMode": {
+     "Fn::If": [
+      "ShouldUsePayPerRequestBilling",
+      "PAY_PER_REQUEST",
+      {
+       "Ref": "AWS::NoValue"
+      }
+     ]
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/GuestPhotoTable/Default/Default"
+   }
+  },
+  "GuestPhotoIAMRoleD3F77BC0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "appsync.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Policies": [
+     {
+      "PolicyDocument": {
+       "Statement": [
+        {
+         "Action": [
+          "dynamodb:BatchGetItem",
+          "dynamodb:BatchWriteItem",
+          "dynamodb:PutItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:GetItem",
+          "dynamodb:Scan",
+          "dynamodb:Query",
+          "dynamodb:UpdateItem",
+          "dynamodb:ConditionCheckItem",
+          "dynamodb:DescribeTable",
+          "dynamodb:GetRecords",
+          "dynamodb:GetShardIterator"
+         ],
+         "Effect": "Allow",
+         "Resource": [
+          {
+           "Fn::Sub": [
+            "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${tablename}",
+            {
+             "tablename": {
+              "Fn::Join": [
+               "",
+               [
+                "GuestPhoto-",
+                {
+                 "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+                },
+                "-NONE"
+               ]
+              ]
+             }
+            }
+           ]
+          },
+          {
+           "Fn::Sub": [
+            "arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${tablename}/*",
+            {
+             "tablename": {
+              "Fn::Join": [
+               "",
+               [
+                "GuestPhoto-",
+                {
+                 "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+                },
+                "-NONE"
+               ]
+              ]
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "Version": "2012-10-17"
+      },
+      "PolicyName": "DynamoDBAccess"
+     }
+    ],
+    "RoleName": {
+     "Fn::Join": [
+      "",
+      [
+       "GuestPhotoIAMRole57fd90-",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+       },
+       "-NONE"
+      ]
+     ]
+    },
+    "Tags": [
+     {
+      "Key": "amplify:deployment-type",
+      "Value": "sandbox"
+     },
+     {
+      "Key": "amplify:friendly-name",
+      "Value": "amplifyData"
+     },
+     {
+      "Key": "created-by",
+      "Value": "amplify"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/GuestPhotoIAMRole/Resource"
+   }
+  },
+  "GuestPhotoDataSource": {
+   "Type": "AWS::AppSync::DataSource",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DynamoDBConfig": {
+     "AwsRegion": {
+      "Ref": "AWS::Region"
+     },
+     "TableName": {
+      "Fn::Select": [
+       1,
+       {
+        "Fn::Split": [
+         "/",
+         {
+          "Fn::Select": [
+           5,
+           {
+            "Fn::Split": [
+             ":",
+             {
+              "Fn::GetAtt": [
+               "GuestPhotoTable",
+               "TableArn"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    "Name": "GuestPhotoTable",
+    "ServiceRoleArn": {
+     "Fn::GetAtt": [
+      "GuestPhotoIAMRoleD3F77BC0",
+      "Arn"
+     ]
+    },
+    "Type": "AMAZON_DYNAMODB"
+   },
+   "DependsOn": [
+    "GuestPhotoIAMRoleD3F77BC0"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/GuestPhotoDataSource/Resource"
+   }
+  },
+  "QuerygetGuestPhotoauth0FunctionQuerygetGuestPhotoauth0FunctionAppSyncFunction08061815": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "QuerygetGuestPhotoauth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/05eae167dce3e83672509b8befdb0ffd97815138ea2735d14d4c4c7a88ea5d1b.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/QuerygetGuestPhotoauth0Function/QuerygetGuestPhotoauth0Function.AppSyncFunction"
+   }
+  },
+  "QuerygetGuestPhotopostAuth0FunctionQuerygetGuestPhotopostAuth0FunctionAppSyncFunction7CBE2041": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "QuerygetGuestPhotopostAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/QuerygetGuestPhotopostAuth0Function/QuerygetGuestPhotopostAuth0Function.AppSyncFunction"
+   }
+  },
+  "QueryGetGuestPhotoDataResolverFnQueryGetGuestPhotoDataResolverFnAppSyncFunctionE502616E": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Fn::GetAtt": [
+      "GuestPhotoDataSource",
+      "Name"
+     ]
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "QueryGetGuestPhotoDataResolverFn",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/08f4d557693d96c1a4efba0f9dc91330e4b19772fd5477c156468843e3d9cb5e.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4c6a2d29f01c6091bd1d9afe16e5849d456c96f17c3b215938c8067399532719.vtl"
+    }
+   },
+   "DependsOn": [
+    "GuestPhotoDataSource"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/QueryGetGuestPhotoDataResolverFn/QueryGetGuestPhotoDataResolverFn.AppSyncFunction"
+   }
+  },
+  "GetGuestPhotoResolver": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "FieldName": "getGuestPhoto",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "QuerygetGuestPhotoauth0FunctionQuerygetGuestPhotoauth0FunctionAppSyncFunction08061815",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "QuerygetGuestPhotopostAuth0FunctionQuerygetGuestPhotopostAuth0FunctionAppSyncFunction7CBE2041",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "QueryGetGuestPhotoDataResolverFnQueryGetGuestPhotoDataResolverFnAppSyncFunctionE502616E",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "RequestMappingTemplate": {
+     "Fn::Join": [
+      "",
+      [
+       "$util.qr($ctx.stash.put(\"typeName\", \"Query\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"getGuestPhoto\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n$util.qr($ctx.stash.put(\"tableName\", \"",
+       {
+        "Fn::Select": [
+         1,
+         {
+          "Fn::Split": [
+           "/",
+           {
+            "Fn::Select": [
+             5,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Fn::GetAtt": [
+                 "GuestPhotoTable",
+                 "TableArn"
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthauthenticatedUserRoleC48C0855Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthunauthenticatedUserRoleF53949CBRef"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthIdentityPool6E04CF60Ref"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n$util.toJson({})"
+      ]
+     ]
+    },
+    "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)",
+    "TypeName": "Query"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/queryGetGuestPhotoResolver"
+   }
+  },
+  "QuerylistGuestPhotosauth0FunctionQuerylistGuestPhotosauth0FunctionAppSyncFunctionD2925513": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "QuerylistGuestPhotosauth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/05eae167dce3e83672509b8befdb0ffd97815138ea2735d14d4c4c7a88ea5d1b.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/QuerylistGuestPhotosauth0Function/QuerylistGuestPhotosauth0Function.AppSyncFunction"
+   }
+  },
+  "QuerylistGuestPhotospostAuth0FunctionQuerylistGuestPhotospostAuth0FunctionAppSyncFunction65FBD636": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "QuerylistGuestPhotospostAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/QuerylistGuestPhotospostAuth0Function/QuerylistGuestPhotospostAuth0Function.AppSyncFunction"
+   }
+  },
+  "QueryListGuestPhotosDataResolverFnQueryListGuestPhotosDataResolverFnAppSyncFunction21634B3D": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Fn::GetAtt": [
+      "GuestPhotoDataSource",
+      "Name"
+     ]
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "QueryListGuestPhotosDataResolverFn",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/9fcbe070ecd3023c5bf5b966fa9584757db9762eef123bad0820bd87591b2174.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/cc01911d0269d4080ea57505dc445dfc315ef7ad85d3d9d4ea1357858bff451d.vtl"
+    }
+   },
+   "DependsOn": [
+    "GuestPhotoDataSource"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/QueryListGuestPhotosDataResolverFn/QueryListGuestPhotosDataResolverFn.AppSyncFunction"
+   }
+  },
+  "ListGuestPhotoResolver": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "FieldName": "listGuestPhotos",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "QuerylistGuestPhotosauth0FunctionQuerylistGuestPhotosauth0FunctionAppSyncFunctionD2925513",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "QuerylistGuestPhotospostAuth0FunctionQuerylistGuestPhotospostAuth0FunctionAppSyncFunction65FBD636",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "QueryListGuestPhotosDataResolverFnQueryListGuestPhotosDataResolverFnAppSyncFunction21634B3D",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "RequestMappingTemplate": {
+     "Fn::Join": [
+      "",
+      [
+       "$util.qr($ctx.stash.put(\"typeName\", \"Query\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"listGuestPhotos\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n$util.qr($ctx.stash.put(\"tableName\", \"",
+       {
+        "Fn::Select": [
+         1,
+         {
+          "Fn::Split": [
+           "/",
+           {
+            "Fn::Select": [
+             5,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Fn::GetAtt": [
+                 "GuestPhotoTable",
+                 "TableArn"
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthauthenticatedUserRoleC48C0855Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthunauthenticatedUserRoleF53949CBRef"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthIdentityPool6E04CF60Ref"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n$util.toJson({})"
+      ]
+     ]
+    },
+    "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)",
+    "TypeName": "Query"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/queryListGuestPhotosResolver"
+   }
+  },
+  "MutationcreateGuestPhotoinit0FunctionMutationcreateGuestPhotoinit0FunctionAppSyncFunction38B3D366": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationcreateGuestPhotoinit0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/a183ddccbd956316c38ef97177b8f088ef0826f62023323f5ae6053d348ccffc.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/MutationcreateGuestPhotoinit0Function/MutationcreateGuestPhotoinit0Function.AppSyncFunction"
+   }
+  },
+  "MutationcreateGuestPhotoauth0FunctionMutationcreateGuestPhotoauth0FunctionAppSyncFunction95A64AC0": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationcreateGuestPhotoauth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/d637c1fb7301003b8a5ada269338cf2e8df6cc0dc412ef13acc6158d680b6d3e.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/MutationcreateGuestPhotoauth0Function/MutationcreateGuestPhotoauth0Function.AppSyncFunction"
+   }
+  },
+  "MutationcreateGuestPhotopostAuth0FunctionMutationcreateGuestPhotopostAuth0FunctionAppSyncFunctionE9D573D1": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationcreateGuestPhotopostAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/MutationcreateGuestPhotopostAuth0Function/MutationcreateGuestPhotopostAuth0Function.AppSyncFunction"
+   }
+  },
+  "MutationCreateGuestPhotoDataResolverFnMutationCreateGuestPhotoDataResolverFnAppSyncFunction8C36DCD5": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Fn::GetAtt": [
+      "GuestPhotoDataSource",
+      "Name"
+     ]
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationCreateGuestPhotoDataResolverFn",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/e466037ed2a6bc339e6eecbd390c9733deaeff2f4818263a240ad0b8d57e0a04.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f4a52b72209a9dfa197b5e7367a5c378c5bb86de6e29ddd9e48b49a3fe54b249.vtl"
+    }
+   },
+   "DependsOn": [
+    "GuestPhotoDataSource"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/MutationCreateGuestPhotoDataResolverFn/MutationCreateGuestPhotoDataResolverFn.AppSyncFunction"
+   }
+  },
+  "CreateGuestPhotoResolver": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "FieldName": "createGuestPhoto",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "MutationcreateGuestPhotoinit0FunctionMutationcreateGuestPhotoinit0FunctionAppSyncFunction38B3D366",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationcreateGuestPhotoauth0FunctionMutationcreateGuestPhotoauth0FunctionAppSyncFunction95A64AC0",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationcreateGuestPhotopostAuth0FunctionMutationcreateGuestPhotopostAuth0FunctionAppSyncFunctionE9D573D1",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationCreateGuestPhotoDataResolverFnMutationCreateGuestPhotoDataResolverFnAppSyncFunction8C36DCD5",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "RequestMappingTemplate": {
+     "Fn::Join": [
+      "",
+      [
+       "$util.qr($ctx.stash.put(\"typeName\", \"Mutation\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"createGuestPhoto\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n$util.qr($ctx.stash.put(\"tableName\", \"",
+       {
+        "Fn::Select": [
+         1,
+         {
+          "Fn::Split": [
+           "/",
+           {
+            "Fn::Select": [
+             5,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Fn::GetAtt": [
+                 "GuestPhotoTable",
+                 "TableArn"
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthauthenticatedUserRoleC48C0855Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthunauthenticatedUserRoleF53949CBRef"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthIdentityPool6E04CF60Ref"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n$util.toJson({})"
+      ]
+     ]
+    },
+    "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)",
+    "TypeName": "Mutation"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/mutationCreateGuestPhotoResolver"
+   }
+  },
+  "MutationupdateGuestPhotoinit0FunctionMutationupdateGuestPhotoinit0FunctionAppSyncFunction6AD6712A": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationupdateGuestPhotoinit0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/06db846fd14e6fc371f22b12b5545ba8e2dbfeda85d8c8d586c71c282166657b.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/MutationupdateGuestPhotoinit0Function/MutationupdateGuestPhotoinit0Function.AppSyncFunction"
+   }
+  },
+  "MutationupdateGuestPhotoauth0FunctionMutationupdateGuestPhotoauth0FunctionAppSyncFunctionB1C3A057": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Fn::GetAtt": [
+      "GuestPhotoDataSource",
+      "Name"
+     ]
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationupdateGuestPhotoauth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/1f5fed297da9c32ae3af922bf3a38ccf23b956078887d16891ec06c20c64722c.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/e6a490b729b651864d2ded63a93e6982d812c1f536ea01090670b4f2b7cae5a7.vtl"
+    }
+   },
+   "DependsOn": [
+    "GuestPhotoDataSource"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/MutationupdateGuestPhotoauth0Function/MutationupdateGuestPhotoauth0Function.AppSyncFunction"
+   }
+  },
+  "MutationupdateGuestPhotopostAuth0FunctionMutationupdateGuestPhotopostAuth0FunctionAppSyncFunction413808B9": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationupdateGuestPhotopostAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/MutationupdateGuestPhotopostAuth0Function/MutationupdateGuestPhotopostAuth0Function.AppSyncFunction"
+   }
+  },
+  "MutationUpdateGuestPhotoDataResolverFnMutationUpdateGuestPhotoDataResolverFnAppSyncFunctionE66F68A1": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Fn::GetAtt": [
+      "GuestPhotoDataSource",
+      "Name"
+     ]
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationUpdateGuestPhotoDataResolverFn",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/474bf0776ec2164a13191d1a0a9e057154931e4918fea5086f49850d02a5371b.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f4a52b72209a9dfa197b5e7367a5c378c5bb86de6e29ddd9e48b49a3fe54b249.vtl"
+    }
+   },
+   "DependsOn": [
+    "GuestPhotoDataSource"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/MutationUpdateGuestPhotoDataResolverFn/MutationUpdateGuestPhotoDataResolverFn.AppSyncFunction"
+   }
+  },
+  "UpdateGuestPhotoResolver": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "FieldName": "updateGuestPhoto",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "MutationupdateGuestPhotoinit0FunctionMutationupdateGuestPhotoinit0FunctionAppSyncFunction6AD6712A",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationupdateGuestPhotoauth0FunctionMutationupdateGuestPhotoauth0FunctionAppSyncFunctionB1C3A057",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationupdateGuestPhotopostAuth0FunctionMutationupdateGuestPhotopostAuth0FunctionAppSyncFunction413808B9",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationUpdateGuestPhotoDataResolverFnMutationUpdateGuestPhotoDataResolverFnAppSyncFunctionE66F68A1",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "RequestMappingTemplate": {
+     "Fn::Join": [
+      "",
+      [
+       "$util.qr($ctx.stash.put(\"typeName\", \"Mutation\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"updateGuestPhoto\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n$util.qr($ctx.stash.put(\"tableName\", \"",
+       {
+        "Fn::Select": [
+         1,
+         {
+          "Fn::Split": [
+           "/",
+           {
+            "Fn::Select": [
+             5,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Fn::GetAtt": [
+                 "GuestPhotoTable",
+                 "TableArn"
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthauthenticatedUserRoleC48C0855Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthunauthenticatedUserRoleF53949CBRef"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthIdentityPool6E04CF60Ref"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n$util.toJson({})"
+      ]
+     ]
+    },
+    "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)",
+    "TypeName": "Mutation"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/mutationUpdateGuestPhotoResolver"
+   }
+  },
+  "MutationdeleteGuestPhotoauth0FunctionMutationdeleteGuestPhotoauth0FunctionAppSyncFunction0C49F542": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Fn::GetAtt": [
+      "GuestPhotoDataSource",
+      "Name"
+     ]
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationdeleteGuestPhotoauth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/1f5fed297da9c32ae3af922bf3a38ccf23b956078887d16891ec06c20c64722c.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/31396ade4c943109881e5f3cf749d9173738d0fba0634f11037f99abe97d8874.vtl"
+    }
+   },
+   "DependsOn": [
+    "GuestPhotoDataSource"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/MutationdeleteGuestPhotoauth0Function/MutationdeleteGuestPhotoauth0Function.AppSyncFunction"
+   }
+  },
+  "MutationdeleteGuestPhotopostAuth0FunctionMutationdeleteGuestPhotopostAuth0FunctionAppSyncFunction3F43B836": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationdeleteGuestPhotopostAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/MutationdeleteGuestPhotopostAuth0Function/MutationdeleteGuestPhotopostAuth0Function.AppSyncFunction"
+   }
+  },
+  "MutationDeleteGuestPhotoDataResolverFnMutationDeleteGuestPhotoDataResolverFnAppSyncFunction9AD64ECC": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Fn::GetAtt": [
+      "GuestPhotoDataSource",
+      "Name"
+     ]
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "MutationDeleteGuestPhotoDataResolverFn",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4f7907d1209a2c9953a0c053df402c634e359546d70c7cc5c2e8e21ea734880f.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f4a52b72209a9dfa197b5e7367a5c378c5bb86de6e29ddd9e48b49a3fe54b249.vtl"
+    }
+   },
+   "DependsOn": [
+    "GuestPhotoDataSource"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/MutationDeleteGuestPhotoDataResolverFn/MutationDeleteGuestPhotoDataResolverFn.AppSyncFunction"
+   }
+  },
+  "DeleteGuestPhotoResolver": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "FieldName": "deleteGuestPhoto",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "MutationdeleteGuestPhotoauth0FunctionMutationdeleteGuestPhotoauth0FunctionAppSyncFunction0C49F542",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationdeleteGuestPhotopostAuth0FunctionMutationdeleteGuestPhotopostAuth0FunctionAppSyncFunction3F43B836",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "MutationDeleteGuestPhotoDataResolverFnMutationDeleteGuestPhotoDataResolverFnAppSyncFunction9AD64ECC",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "RequestMappingTemplate": {
+     "Fn::Join": [
+      "",
+      [
+       "$util.qr($ctx.stash.put(\"typeName\", \"Mutation\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"deleteGuestPhoto\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n$util.qr($ctx.stash.put(\"tableName\", \"",
+       {
+        "Fn::Select": [
+         1,
+         {
+          "Fn::Split": [
+           "/",
+           {
+            "Fn::Select": [
+             5,
+             {
+              "Fn::Split": [
+               ":",
+               {
+                "Fn::GetAtt": [
+                 "GuestPhotoTable",
+                 "TableArn"
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthauthenticatedUserRoleC48C0855Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthunauthenticatedUserRoleF53949CBRef"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthIdentityPool6E04CF60Ref"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n$util.toJson({})"
+      ]
+     ]
+    },
+    "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)",
+    "TypeName": "Mutation"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/mutationDeleteGuestPhotoResolver"
+   }
+  },
+  "SubscriptiononCreateGuestPhotoauth0FunctionSubscriptiononCreateGuestPhotoauth0FunctionAppSyncFunctionDB676AEE": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "SubscriptiononCreateGuestPhotoauth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/00f6f589fe6e0f00cf86182c8bb5084fcd5cb277bc1fe6e2800788fa669d4fa3.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/SubscriptiononCreateGuestPhotoauth0Function/SubscriptiononCreateGuestPhotoauth0Function.AppSyncFunction"
+   }
+  },
+  "SubscriptiononCreateGuestPhotopostAuth0FunctionSubscriptiononCreateGuestPhotopostAuth0FunctionAppSyncFunction946A49F7": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "SubscriptiononCreateGuestPhotopostAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/SubscriptiononCreateGuestPhotopostAuth0Function/SubscriptiononCreateGuestPhotopostAuth0Function.AppSyncFunction"
+   }
+  },
+  "SubscriptionOnCreateGuestPhotoDataResolverFnSubscriptionOnCreateGuestPhotoDataResolverFnAppSyncFunction455FF2A0": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "SubscriptionOnCreateGuestPhotoDataResolverFn",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/fe3c43ada4b9d681a5e2312663ef7a73386424d73b73e51f8e2e9d4b50f7c502.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/e0cff47fb007f0bbf2a4e43ca256d6aa7ec109821769fd79fa7c5e83f0e7f9fc.vtl"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/SubscriptionOnCreateGuestPhotoDataResolverFn/SubscriptionOnCreateGuestPhotoDataResolverFn.AppSyncFunction"
+   }
+  },
+  "SubscriptiononCreateGuestPhotoResolver": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "FieldName": "onCreateGuestPhoto",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "SubscriptiononCreateGuestPhotoauth0FunctionSubscriptiononCreateGuestPhotoauth0FunctionAppSyncFunctionDB676AEE",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "SubscriptiononCreateGuestPhotopostAuth0FunctionSubscriptiononCreateGuestPhotopostAuth0FunctionAppSyncFunction946A49F7",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "SubscriptionOnCreateGuestPhotoDataResolverFnSubscriptionOnCreateGuestPhotoDataResolverFnAppSyncFunction455FF2A0",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "RequestMappingTemplate": {
+     "Fn::Join": [
+      "",
+      [
+       "$util.qr($ctx.stash.put(\"typeName\", \"Subscription\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"onCreateGuestPhoto\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"NONE\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthauthenticatedUserRoleC48C0855Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthunauthenticatedUserRoleF53949CBRef"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthIdentityPool6E04CF60Ref"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n$util.toJson({})"
+      ]
+     ]
+    },
+    "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)",
+    "TypeName": "Subscription"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/subscriptionOnCreateGuestPhotoResolver"
+   }
+  },
+  "SubscriptiononUpdateGuestPhotoauth0FunctionSubscriptiononUpdateGuestPhotoauth0FunctionAppSyncFunction8786666C": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "SubscriptiononUpdateGuestPhotoauth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/00f6f589fe6e0f00cf86182c8bb5084fcd5cb277bc1fe6e2800788fa669d4fa3.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/SubscriptiononUpdateGuestPhotoauth0Function/SubscriptiononUpdateGuestPhotoauth0Function.AppSyncFunction"
+   }
+  },
+  "SubscriptiononUpdateGuestPhotopostAuth0FunctionSubscriptiononUpdateGuestPhotopostAuth0FunctionAppSyncFunction6DF97473": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "SubscriptiononUpdateGuestPhotopostAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/SubscriptiononUpdateGuestPhotopostAuth0Function/SubscriptiononUpdateGuestPhotopostAuth0Function.AppSyncFunction"
+   }
+  },
+  "SubscriptionOnUpdateGuestPhotoDataResolverFnSubscriptionOnUpdateGuestPhotoDataResolverFnAppSyncFunction8C1A2603": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "SubscriptionOnUpdateGuestPhotoDataResolverFn",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/fe3c43ada4b9d681a5e2312663ef7a73386424d73b73e51f8e2e9d4b50f7c502.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/e0cff47fb007f0bbf2a4e43ca256d6aa7ec109821769fd79fa7c5e83f0e7f9fc.vtl"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/SubscriptionOnUpdateGuestPhotoDataResolverFn/SubscriptionOnUpdateGuestPhotoDataResolverFn.AppSyncFunction"
+   }
+  },
+  "SubscriptiononUpdateGuestPhotoResolver": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "FieldName": "onUpdateGuestPhoto",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "SubscriptiononUpdateGuestPhotoauth0FunctionSubscriptiononUpdateGuestPhotoauth0FunctionAppSyncFunction8786666C",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "SubscriptiononUpdateGuestPhotopostAuth0FunctionSubscriptiononUpdateGuestPhotopostAuth0FunctionAppSyncFunction6DF97473",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "SubscriptionOnUpdateGuestPhotoDataResolverFnSubscriptionOnUpdateGuestPhotoDataResolverFnAppSyncFunction8C1A2603",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "RequestMappingTemplate": {
+     "Fn::Join": [
+      "",
+      [
+       "$util.qr($ctx.stash.put(\"typeName\", \"Subscription\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"onUpdateGuestPhoto\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"NONE\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthauthenticatedUserRoleC48C0855Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthunauthenticatedUserRoleF53949CBRef"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthIdentityPool6E04CF60Ref"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n$util.toJson({})"
+      ]
+     ]
+    },
+    "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)",
+    "TypeName": "Subscription"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/subscriptionOnUpdateGuestPhotoResolver"
+   }
+  },
+  "SubscriptiononDeleteGuestPhotoauth0FunctionSubscriptiononDeleteGuestPhotoauth0FunctionAppSyncFunction02737215": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "SubscriptiononDeleteGuestPhotoauth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/00f6f589fe6e0f00cf86182c8bb5084fcd5cb277bc1fe6e2800788fa669d4fa3.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/SubscriptiononDeleteGuestPhotoauth0Function/SubscriptiononDeleteGuestPhotoauth0Function.AppSyncFunction"
+   }
+  },
+  "SubscriptiononDeleteGuestPhotopostAuth0FunctionSubscriptiononDeleteGuestPhotopostAuth0FunctionAppSyncFunction6F714B3E": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "SubscriptiononDeleteGuestPhotopostAuth0Function",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
+    },
+    "ResponseMappingTemplate": "$util.toJson({})"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/SubscriptiononDeleteGuestPhotopostAuth0Function/SubscriptiononDeleteGuestPhotopostAuth0Function.AppSyncFunction"
+   }
+  },
+  "SubscriptionOnDeleteGuestPhotoDataResolverFnSubscriptionOnDeleteGuestPhotoDataResolverFnAppSyncFunctionD948DBCD": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "DataSourceName": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPINONEDSBD121B8CName"
+    },
+    "FunctionVersion": "2018-05-29",
+    "Name": "SubscriptionOnDeleteGuestPhotoDataResolverFn",
+    "RequestMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/fe3c43ada4b9d681a5e2312663ef7a73386424d73b73e51f8e2e9d4b50f7c502.vtl"
+    },
+    "ResponseMappingTemplateS3Location": {
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/e0cff47fb007f0bbf2a4e43ca256d6aa7ec109821769fd79fa7c5e83f0e7f9fc.vtl"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/SubscriptionOnDeleteGuestPhotoDataResolverFn/SubscriptionOnDeleteGuestPhotoDataResolverFn.AppSyncFunction"
+   }
+  },
+  "SubscriptiononDeleteGuestPhotoResolver": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+    },
+    "FieldName": "onDeleteGuestPhoto",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "SubscriptiononDeleteGuestPhotoauth0FunctionSubscriptiononDeleteGuestPhotoauth0FunctionAppSyncFunction02737215",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "SubscriptiononDeleteGuestPhotopostAuth0FunctionSubscriptiononDeleteGuestPhotopostAuth0FunctionAppSyncFunction6F714B3E",
+        "FunctionId"
+       ]
+      },
+      {
+       "Fn::GetAtt": [
+        "SubscriptionOnDeleteGuestPhotoDataResolverFnSubscriptionOnDeleteGuestPhotoDataResolverFnAppSyncFunctionD948DBCD",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "RequestMappingTemplate": {
+     "Fn::Join": [
+      "",
+      [
+       "$util.qr($ctx.stash.put(\"typeName\", \"Subscription\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"onDeleteGuestPhoto\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"NONE\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"connectionAttributes\", {}))\n\n$util.qr($ctx.stash.put(\"authRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthauthenticatedUserRoleC48C0855Ref"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":sts::",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":assumed-role/",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthunauthenticatedUserRoleF53949CBRef"
+       },
+       "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"",
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795authNestedStackauthNestedStackResourceC895C014Outputsamplifyfigmamymakefile11359sandbox36a0e11795authamplifyAuthIdentityPool6E04CF60Ref"
+       },
+       "\"))\n$util.qr($ctx.stash.put(\"adminRoles\", []))\n$util.toJson({})"
+      ]
+     ]
+    },
+    "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)",
+    "TypeName": "Subscription"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/subscriptionOnDeleteGuestPhotoResolver"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WOwW6DMAyGn6X34HV0k3ZdQT1uE+xemcRUKeCg2GlVId59gk6ddvr9yZ/sP4f85RW2G7xKZl2X9b6B6YNEydWKtjNFy18YcSCluEAR2Hn1gU1FElK0ZIokGoY/bPkx41WOk7sxDsE18I1NT3sUMh4HmKrQ3+3Q02xwHOXGFqZy1cumRMX6cfI/HRLbpUQRuPWnFHFt9Pu5v1CcjeyOKEIq8L6EkR3sk+1IlwLz4n4mHZOadV0rnjyfZsPBEZzl6ZLn8PwG281ZvM9iYvUDQXXPH5/ZsuE2AQAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "amplify-figmamymakefile-11359-sandbox-36a0e11795/data/amplifyData/GuestPhoto/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "GetAttGuestPhotoTableStreamArn": {
+   "Description": "Your DynamoDB table StreamArn.",
+   "Value": {
+    "Fn::GetAtt": [
+     "GuestPhotoTable",
+     "TableStreamArn"
+    ]
+   },
+   "Export": {
+    "Name": {
+     "Fn::Join": [
+      ":",
+      [
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+       },
+       "GetAtt:GuestPhotoTable:StreamArn"
+      ]
+     ]
+    }
+   }
+  },
+  "GetAttGuestPhotoTableName": {
+   "Description": "Your DynamoDB table name.",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "GuestPhoto-",
+      {
+       "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+      },
+      "-NONE"
+     ]
+    ]
+   },
+   "Export": {
+    "Name": {
+     "Fn::Join": [
+      ":",
+      [
+       {
+        "Ref": "referencetoamplifyfigmamymakefile11359sandbox36a0e11795dataamplifyDataGraphQLAPIFA7F0FF8ApiId"
+       },
+       "GetAtt:GuestPhotoTable:Name"
+      ]
+     ]
+    }
+   }
+  }
+ }
+}
