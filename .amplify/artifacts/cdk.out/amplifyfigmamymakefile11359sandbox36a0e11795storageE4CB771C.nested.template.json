@@ -13,7 +13,8 @@
        "AllowedMethods": [
         "GET",
         "HEAD",
-        "PUT"
+        "PUT",
+        "DELETE"
        ],
        "AllowedOrigins": [
         "*"

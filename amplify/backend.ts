@@ -31,7 +31,7 @@ backend.storage.resources.cfnResources.cfnBucket.corsConfiguration = {
   corsRules: [
     {
       allowedOrigins: ["*"],
-      allowedMethods: ["GET", "HEAD", "PUT"],
+      allowedMethods: ["GET", "HEAD", "PUT", "DELETE"],
       allowedHeaders: ["*"],
       exposedHeaders: ["ETag"],
       maxAge: 3000,

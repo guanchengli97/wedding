@@ -153,8 +153,8 @@ export function Home() {
             <p className="text-[#6b6256]">{content.weekendSub}</p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {content.events.map((event, index) => (
+          <div className="grid max-w-4xl mx-auto md:grid-cols-2 gap-8">
+            {content.events.slice(0, 2).map((event, index) => (
               <motion.div
                 key={event.title}
                 initial={{ opacity: 0, y: 20 }}
