@@ -995,7 +995,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "MutationcreateGuestPhotoauth0Function",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/d637c1fb7301003b8a5ada269338cf2e8df6cc0dc412ef13acc6158d680b6d3e.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/429d1feb5cf12ea1f22133b17b4fc5505ca5907df6c070f017f744005c2ef979.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },

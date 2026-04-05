@@ -15,7 +15,7 @@ const schema = a.schema({
     })
     .authorization((allow) => [
       allow.publicApiKey().to(["create"]),
-      allow.group("ADMINS").to(["read", "update", "delete"]),
+      allow.group("ADMINS"),
     ]),
   GuestPhoto: a
     .model({
@@ -26,7 +26,7 @@ const schema = a.schema({
     })
     .authorization((allow) => [
       allow.publicApiKey().to(["create", "read"]),
-      allow.group("ADMINS").to(["read", "update", "delete"]),
+      allow.group("ADMINS"),
     ]),
 });
 

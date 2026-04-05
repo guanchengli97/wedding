@@ -155,12 +155,14 @@
                     "groupClaim": "cognito:groups",
                     "provider": "userPools",
                     "allow": "groups",
-                    "operations": [
-                      "read",
-                      "update"
-                    ],
                     "groups": [
                       "ADMINS"
+                    ],
+                    "operations": [
+                      "create",
+                      "update",
+                      "delete",
+                      "read"
                     ]
                   }
                 ]
@@ -251,13 +253,14 @@
                     "groupClaim": "cognito:groups",
                     "provider": "userPools",
                     "allow": "groups",
-                    "operations": [
-                      "read",
-                      "update",
-                      "delete"
-                    ],
                     "groups": [
                       "ADMINS"
+                    ],
+                    "operations": [
+                      "create",
+                      "update",
+                      "delete",
+                      "read"
                     ]
                   }
                 ]
