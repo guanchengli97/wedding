@@ -835,7 +835,7 @@ export function RSVPAdmin() {
                       {photo.url ? (
                         <ImageWithFallback
                           src={photo.url}
-                          alt={photo.originalFileName || content.message}
+                          alt={photo.message || content.message}
                           className="h-40 w-full object-cover sm:h-48"
                         />
                       ) : (
@@ -849,14 +849,13 @@ export function RSVPAdmin() {
                           checked={isSelected}
                           onChange={() => toggleGuestPhotoSelection(photo.id)}
                           className="mr-2 align-middle"
-                          aria-label={`${content.selectPhoto}: ${photo.originalFileName || photo.message || photo.id}`}
+                          aria-label={`${content.selectPhoto}: ${photo.message || photo.uploaderName || photo.id}`}
                         />
                         {content.selectPhoto}
                       </div>
                     </div>
                     <div className="p-3 text-sm text-[#6b6256]">
-                      <p className="break-words text-[#4a4238]">{photo.originalFileName || content.noValue}</p>
-                      <p className="mt-1">
+                      <p>
                         {content.uploadedBy}: {photo.uploaderName || content.noValue}
                       </p>
                       <p className="mt-1 break-words">

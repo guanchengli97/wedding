@@ -106,8 +106,6 @@ export function Gallery() {
     uploadedPhotosSub: isZh ? "宾客上传的照片和留言会出现在这里。" : "Photos and notes uploaded by guests will appear here.",
     uploadedEmpty: isZh ? "还没有宾客分享，等你来第一条。" : "No guest shares yet. Be the first to post.",
     uploadedBy: isZh ? "上传者" : "Uploaded by",
-    photoFile: isZh ? "照片文件" : "Photo file",
-    messageOnly: isZh ? "仅留言" : "Message only",
     noValue: isZh ? "未填写" : "Not provided",
     loadingUploads: isZh ? "正在加载宾客内容..." : "Loading guest uploads...",
     comingSoonTitle: isZh ? "更多照片即将上线" : "More Photos Coming Soon",
@@ -440,23 +438,24 @@ export function Gallery() {
                       {hasPhoto ? (
                         <ImageWithFallback
                           src={photo.url ?? ""}
-                          alt={photo.originalFileName || content.messageOnly}
+                          alt={photo.message || content.uploadedPhotosTitle}
                           className="h-40 w-full object-cover sm:h-56 md:h-72"
                         />
                       ) : (
                         <div className="flex min-h-40 flex-col justify-center gap-4 bg-[#f8f2ea] p-6 text-[#4a4238] sm:min-h-56 md:min-h-72">
                           <MessageSquareQuote className="h-8 w-8 text-[#b8997a]" />
-                          <p className="text-lg leading-relaxed break-words">{photo.message || content.noValue}</p>
+                          {photo.message ? <p className="text-lg leading-relaxed break-words">{photo.message}</p> : null}
                         </div>
                       )}
                       <div className="p-4">
-                        <p className="text-[#4a4238] break-words">{photo.originalFileName || content.messageOnly}</p>
-                        <p className="mt-2 text-sm text-[#8a7e70]">
+                        <p className="text-sm text-[#8a7e70]">
                           {content.uploadedBy}: {photo.uploaderName || content.noValue}
                         </p>
-                        <p className="mt-2 text-sm text-[#6b6256] break-words">
-                          {content.message}: {photo.message || content.noValue}
-                        </p>
+                        {photo.message ? (
+                          <p className="mt-2 text-sm text-[#6b6256] break-words">
+                            {content.message}: {photo.message}
+                          </p>
+                        ) : null}
                       </div>
                     </motion.div>
                   );
