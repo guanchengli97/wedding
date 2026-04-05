@@ -105,8 +105,11 @@ export function RSVPAdmin() {
   const [drafts, setDrafts] = useState<Record<string, RSVPDraft>>({});
   const [editingById, setEditingById] = useState<Record<string, boolean>>({});
   const [savingById, setSavingById] = useState<Record<string, boolean>>({});
+  const [deletingById, setDeletingById] = useState<Record<string, boolean>>({});
   const [saveErrorById, setSaveErrorById] = useState<Record<string, string>>({});
   const [saveSuccessById, setSaveSuccessById] = useState<Record<string, string>>({});
+  const [deleteErrorById, setDeleteErrorById] = useState<Record<string, string>>({});
+  const [deleteSuccessById, setDeleteSuccessById] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [authLoading, setAuthLoading] = useState(true);
@@ -188,6 +191,14 @@ export function RSVPAdmin() {
     requiredName: isZh ? "姓名不能为空。" : "Full name is required.",
   };
 
+  const deleteLabel = isZh ? "删除" : "Delete";
+  const deletingLabel = isZh ? "删除中..." : "Deleting...";
+  const deleteFailedMessage = isZh ? "删除失败。" : "Failed to delete record.";
+  const deleteSuccessMessage = isZh ? "记录已删除。" : "Record deleted.";
+  const deleteConfirmMessage = isZh
+    ? "确定要删除这条 RSVP 记录吗？此操作无法撤销。"
+    : "Delete this RSVP record? This action cannot be undone.";
+
   const loadRecords = async () => {
     setLoading(true);
     setError("");
@@ -213,8 +224,11 @@ export function RSVPAdmin() {
         }, {}),
       );
       setEditingById({});
+      setDeletingById({});
       setSaveErrorById({});
       setSaveSuccessById({});
+      setDeleteErrorById({});
+      setDeleteSuccessById({});
     } catch (err) {
       setError(err instanceof Error && err.message ? err.message : content.error);
     } finally {
@@ -377,6 +391,7 @@ export function RSVPAdmin() {
     setRecords([]);
     setDrafts({});
     setEditingById({});
+    setDeletingById({});
     setError("");
     setAuthError("");
     setAuthStep("signIn");
@@ -384,6 +399,8 @@ export function RSVPAdmin() {
     setNewPassword("");
     setSaveErrorById({});
     setSaveSuccessById({});
+    setDeleteErrorById({});
+    setDeleteSuccessById({});
     setGuestPhotos([]);
     setSelectedGuestPhotoIds([]);
     setGuestPhotoError("");
@@ -410,6 +427,8 @@ export function RSVPAdmin() {
 
     setSaveErrorById((current) => ({ ...current, [recordId]: "" }));
     setSaveSuccessById((current) => ({ ...current, [recordId]: "" }));
+    setDeleteErrorById((current) => ({ ...current, [recordId]: "" }));
+    setDeleteSuccessById((current) => ({ ...current, [recordId]: "" }));
   };
 
   const openEditor = (record: RSVPRecord) => {
@@ -423,6 +442,8 @@ export function RSVPAdmin() {
     }));
     setSaveErrorById((current) => ({ ...current, [record.id]: "" }));
     setSaveSuccessById((current) => ({ ...current, [record.id]: "" }));
+    setDeleteErrorById((current) => ({ ...current, [record.id]: "" }));
+    setDeleteSuccessById((current) => ({ ...current, [record.id]: "" }));
   };
 
   const handleCancel = (record: RSVPRecord) => {
@@ -433,6 +454,8 @@ export function RSVPAdmin() {
     setEditingById((current) => ({ ...current, [record.id]: false }));
     setSaveErrorById((current) => ({ ...current, [record.id]: "" }));
     setSaveSuccessById((current) => ({ ...current, [record.id]: "" }));
+    setDeleteErrorById((current) => ({ ...current, [record.id]: "" }));
+    setDeleteSuccessById((current) => ({ ...current, [record.id]: "" }));
   };
 
   const handleSave = async (record: RSVPRecord) => {
@@ -504,6 +527,8 @@ export function RSVPAdmin() {
         ...current,
         [record.id]: content.saved,
       }));
+      setDeleteErrorById((current) => ({ ...current, [record.id]: "" }));
+      setDeleteSuccessById((current) => ({ ...current, [record.id]: "" }));
     } catch (err) {
       setSaveErrorById((current) => ({
         ...current,
@@ -511,6 +536,67 @@ export function RSVPAdmin() {
       }));
     } finally {
       setSavingById((current) => ({ ...current, [record.id]: false }));
+    }
+  };
+
+  const handleDeleteRecord = async (record: RSVPRecord) => {
+    if (deletingById[record.id]) {
+      return;
+    }
+
+    if (!window.confirm(deleteConfirmMessage)) {
+      return;
+    }
+
+    setDeletingById((current) => ({ ...current, [record.id]: true }));
+    setSaveErrorById((current) => ({ ...current, [record.id]: "" }));
+    setSaveSuccessById((current) => ({ ...current, [record.id]: "" }));
+    setDeleteErrorById((current) => ({ ...current, [record.id]: "" }));
+    setDeleteSuccessById((current) => ({ ...current, [record.id]: "" }));
+
+    try {
+      const { errors } = await client.models.RSVP.delete({ id: record.id }, { authMode: "userPool" });
+
+      if (errors?.length) {
+        throw new Error(errors[0].message);
+      }
+
+      setRecords((current) => current.filter((item) => item.id !== record.id));
+      setDrafts((current) => {
+        const next = { ...current };
+        delete next[record.id];
+        return next;
+      });
+      setEditingById((current) => {
+        const next = { ...current };
+        delete next[record.id];
+        return next;
+      });
+      setSavingById((current) => {
+        const next = { ...current };
+        delete next[record.id];
+        return next;
+      });
+      setDeleteErrorById((current) => {
+        const next = { ...current };
+        delete next[record.id];
+        return next;
+      });
+      setDeleteSuccessById((current) => ({
+        ...current,
+        [record.id]: deleteSuccessMessage,
+      }));
+    } catch (err) {
+      setDeleteErrorById((current) => ({
+        ...current,
+        [record.id]: err instanceof Error && err.message ? err.message : deleteFailedMessage,
+      }));
+    } finally {
+      setDeletingById((current) => {
+        const next = { ...current };
+        delete next[record.id];
+        return next;
+      });
     }
   };
 
@@ -796,8 +882,11 @@ export function RSVPAdmin() {
             const draft = drafts[record.id] ?? createDraft(record);
             const isEditing = editingById[record.id] ?? false;
             const isSaving = savingById[record.id] ?? false;
+            const isDeleting = deletingById[record.id] ?? false;
             const saveError = saveErrorById[record.id];
             const saveSuccess = saveSuccessById[record.id];
+            const deleteError = deleteErrorById[record.id];
+            const deleteSuccess = deleteSuccessById[record.id];
             const isDirty = !draftsEqual(draft, createDraft(record));
 
             return (
@@ -946,11 +1035,22 @@ export function RSVPAdmin() {
                       <div className="min-h-6">
                         {saveError ? <p className="text-sm text-[#b85c5c]">{saveError}</p> : null}
                         {!saveError && saveSuccess ? <p className="text-sm text-[#61805a]">{saveSuccess}</p> : null}
+                        {!saveError && !saveSuccess && deleteError ? <p className="text-sm text-[#b85c5c]">{deleteError}</p> : null}
+                        {!saveError && !saveSuccess && !deleteError && deleteSuccess ? <p className="text-sm text-[#61805a]">{deleteSuccess}</p> : null}
                       </div>
                       <div className="flex gap-3">
                         <button
                           type="button"
-                          disabled={isSaving}
+                          disabled={isSaving || isDeleting}
+                          onClick={() => void handleDeleteRecord(record)}
+                          className="inline-flex items-center gap-2 px-4 py-2 border border-[#b85c5c] text-[#b85c5c] hover:bg-[#b85c5c] hover:text-white disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          {isDeleting ? deletingLabel : deleteLabel}
+                        </button>
+                        <button
+                          type="button"
+                          disabled={isSaving || isDeleting}
                           onClick={() => handleCancel(record)}
                           className="inline-flex items-center gap-2 px-4 py-2 border border-[#d8c9b8] text-[#6b6256] hover:bg-[#eee5dc] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
                         >
@@ -959,7 +1059,7 @@ export function RSVPAdmin() {
                         </button>
                         <button
                           type="button"
-                          disabled={!isDirty || isSaving}
+                          disabled={!isDirty || isSaving || isDeleting}
                           onClick={() => void handleSave(record)}
                           className="inline-flex items-center gap-2 px-4 py-2 bg-[#b8997a] text-white hover:bg-[#a07d5f] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
                         >
@@ -1009,10 +1109,22 @@ export function RSVPAdmin() {
                       <div className="min-h-6">
                         {saveError ? <p className="text-sm text-[#b85c5c]">{saveError}</p> : null}
                         {!saveError && saveSuccess ? <p className="text-sm text-[#61805a]">{saveSuccess}</p> : null}
+                        {!saveError && !saveSuccess && deleteError ? <p className="text-sm text-[#b85c5c]">{deleteError}</p> : null}
+                        {!saveError && !saveSuccess && !deleteError && deleteSuccess ? <p className="text-sm text-[#61805a]">{deleteSuccess}</p> : null}
                       </div>
-                      <div className="flex justify-end">
+                      <div className="flex justify-end gap-3">
                         <button
                           type="button"
+                          disabled={isDeleting}
+                          onClick={() => void handleDeleteRecord(record)}
+                          className="inline-flex items-center gap-2 px-4 py-2 border border-[#b85c5c] text-[#b85c5c] hover:bg-[#b85c5c] hover:text-white disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          {isDeleting ? deletingLabel : deleteLabel}
+                        </button>
+                        <button
+                          type="button"
+                          disabled={isDeleting}
                           onClick={() => openEditor(record)}
                           className="inline-flex items-center gap-2 px-4 py-2 border border-[#b8997a] text-[#b8997a] hover:bg-[#b8997a] hover:text-white transition-colors"
                         >
