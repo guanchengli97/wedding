@@ -3,8 +3,8 @@ import { Heart } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useLanguage } from "../i18n";
 import ourStoryHeroImage from "../../assets/our-story-hero.jpeg";
-import ourStoryCatImage from "../../assets/our-story-cat.jpeg";
-import ourStoryCoupleImage from "../../assets/our-story-couple.jpeg";
+import ourStoryCatImage from "../../assets/our-story-new-left.JPEG";
+import ourStoryCoupleImage from "../../assets/our-story-new-right.JPEG";
 
 export function OurStory() {
   const { language } = useLanguage();
@@ -20,7 +20,7 @@ export function OurStory() {
         {
           year: "2023",
           title: "第一次约会",
-          description: "我们的第一次正式约会，是在校园里一起散步。一路上我们聊了很多，从日常生活到未来计划，从喜欢的食物到各自的小习惯。原本以为只是一次简单的见面，却在不知不觉中走了很久，也更确定了彼此相处时那份轻松和默契。",
+          description: "我们的第一次正式约会，一起散步。一路上我们聊了很多，从日常生活到未来计划，从喜欢的食物到各自的小习惯。原本以为只是一次简单的见面，却在不知不觉中走了很久，也更确定了彼此相处时那份轻松和默契。",
         },
         {
           year: "2024",

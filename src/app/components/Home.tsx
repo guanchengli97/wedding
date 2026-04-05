@@ -8,10 +8,10 @@ import heroWeddingImage from "../../assets/hero-wedding.jpeg";
 export function Home() {
   const { language } = useLanguage();
   const isZh = language === "zh";
-  const englishNames = "Chen Yanying & Li Guancheng";
+  const englishNames = "Li Guancheng & Chen Yanying";
   const content = {
-    heroAlt: isZh ? "陈燕莹和李官城" : "Chen Yanying and Li Guancheng",
-    title: "陈燕莹和李官城",
+    heroAlt: isZh ? "  李官城 & 陈燕莹" : "Li Guancheng and Chen Yanying",
+    title: "李官城 & 陈燕莹",
     subtitle: isZh ? "我们要结婚啦" : "Are Getting Married",
     date: isZh ? "2026年5月2号" : "May 2, 2026",
     location: isZh ? "中国河南省商丘市柘城县" : "Zhecheng County, Shangqiu, Henan, China",
@@ -74,7 +74,7 @@ export function Home() {
             </p>
           )}
 
-          <div className="h-px w-24 bg-white/60 mx-auto mb-6" />
+          <div className="h-px w-24 bg-white/60 mx-auto mb-14" />
 
           <p className="text-xl md:text-2xl tracking-[0.3em] uppercase mb-8 font-light">{content.subtitle}</p>
 

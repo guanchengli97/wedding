@@ -4,6 +4,7 @@ import { Heart, Users, Mail, Phone, MessageSquare } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useLanguage } from "../i18n";
 import { amplifyConfigured, client } from "../../lib/amplify";
+import rsvpHeroImage from "../../assets/rsvp-hero.JPEG";
 
 const initialFormData = {
   fullName: "",
@@ -120,7 +121,7 @@ export function RSVP() {
       <section className="relative h-[50vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <ImageWithFallback
-            src="https://images.unsplash.com/photo-1768777270882-9f74939fee50?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwcmVjZXB0aW9uJTIwdGFibGUlMjBlbGVnYW50fGVufDF8fHx8MTc3NDU4MTU3OHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+            src={rsvpHeroImage}
             alt={content.heroAlt}
             className="w-full h-full object-cover"
           />

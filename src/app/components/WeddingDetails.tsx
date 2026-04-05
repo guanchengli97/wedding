@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { MapPin, Clock, Calendar, Music, Camera, Gift, Shirt, Phone, Mail } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useLanguage } from "../i18n";
+import weddingDetailsHeroImage from "../../assets/wedding-details-hero.JPEG";
 
 export function WeddingDetails() {
   const { language } = useLanguage();
@@ -31,10 +32,6 @@ export function WeddingDetails() {
           answer: "穿得舒适即可，怎么自在怎么来。",
         },
         {
-          question: "会安排接驳车吗？",
-          answer: "会。推荐酒店将提供接驳服务，具体信息会在 RSVP 确认后发送。",
-        },
-        {
           question: "可以带同行宾客吗？",
           answer: "如需携伴参加，请提前和我们说一声，方便我们安排。",
         },
@@ -51,10 +48,6 @@ export function WeddingDetails() {
         {
           question: "What should I wear?",
           answer: "Wear whatever feels comfortable and easy for you.",
-        },
-        {
-          question: "Will transportation be provided?",
-          answer: "Yes! Shuttle service will be available from recommended hotels. Details will be sent with your RSVP confirmation.",
         },
         {
           question: "Can I bring a plus one?",
@@ -102,7 +95,7 @@ export function WeddingDetails() {
       <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <ImageWithFallback
-            src="https://images.unsplash.com/photo-1757589227072-0dd17af42433?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwdmVudWUlMjBjZXJlbW9ueSUyMGZsb3dlcnN8ZW58MXx8fHwxNzc0NTgxNTc3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+            src={weddingDetailsHeroImage}
             alt={content.heroAlt}
             className="w-full h-full object-cover"
           />

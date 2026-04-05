@@ -8,7 +8,7 @@ export function Layout() {
   const location = useLocation();
   const { language, toggleLanguage } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const englishNames = "Chen Yanying & Li Guancheng";
+  const englishNames = "Li Guancheng & Chen Yanying";
 
   const navItems = [
     { path: "/", label: language === "zh" ? "首页" : "Home" },
@@ -19,7 +19,7 @@ export function Layout() {
   ];
 
   const footerText = {
-    names: language === "zh" ? "陈燕莹和李官城" : "Chen Yanying & Li Guancheng",
+    names: language === "zh" ? "李官城和陈燕莹" : "Li Guancheng & Chen Yanying",
     date: language === "zh" ? "2026年5月2号" : "May 2, 2026",
     designed: language === "zh" ? "用爱设计" : "Designed with love",
     languageButton: language === "zh" ? "EN" : "中文",
@@ -35,7 +35,7 @@ export function Layout() {
             <Link to="/" className="flex items-center gap-2 group">
               <Heart className="w-6 h-6 text-[#b8997a] transition-transform group-hover:scale-110" />
               <span className="text-xl tracking-wider text-[#4a4238]" style={{ fontFamily: 'var(--font-serif)' }}>
-                陈 & 李
+                李 & 陈
               </span>
             </Link>
 
