@@ -1,0 +1,353 @@
+type RSVP @aws_api_key @aws_iam @aws_cognito_user_pools {
+  fullName: String!
+  email: String
+  phone: String
+  guestCount: Int!
+  attending: Boolean!
+  arrivalInfo: String
+  songRequest: String
+  message: String
+  language: String!
+  id: ID!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type GuestPhoto @aws_api_key @aws_iam @aws_cognito_user_pools {
+  storagePath: String
+  originalFileName: String
+  uploaderName: String
+  message: String
+  id: ID!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+input AmplifyAIConversationTurnErrorInput {
+  errorType: String!
+  message: String!
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelSubscriptionStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  in: [String]
+  notIn: [String]
+}
+
+input ModelSubscriptionIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  in: [Int]
+  notIn: [Int]
+}
+
+input ModelSubscriptionFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  in: [Float]
+  notIn: [Float]
+}
+
+input ModelSubscriptionBooleanInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelSubscriptionIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  in: [ID]
+  notIn: [ID]
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelRSVPConnection @aws_api_key @aws_iam @aws_cognito_user_pools {
+  items: [RSVP]!
+  nextToken: String
+}
+
+input ModelRSVPFilterInput {
+  fullName: ModelStringInput
+  email: ModelStringInput
+  phone: ModelStringInput
+  guestCount: ModelIntInput
+  attending: ModelBooleanInput
+  arrivalInfo: ModelStringInput
+  songRequest: ModelStringInput
+  message: ModelStringInput
+  language: ModelStringInput
+  id: ModelIDInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  and: [ModelRSVPFilterInput]
+  or: [ModelRSVPFilterInput]
+  not: ModelRSVPFilterInput
+}
+
+type Query {
+  getRSVP(id: ID!): RSVP @aws_api_key @aws_iam @aws_cognito_user_pools
+  listRSVPS(filter: ModelRSVPFilterInput, limit: Int, nextToken: String): ModelRSVPConnection @aws_api_key @aws_iam @aws_cognito_user_pools
+  getGuestPhoto(id: ID!): GuestPhoto @aws_api_key @aws_iam @aws_cognito_user_pools
+  listGuestPhotos(filter: ModelGuestPhotoFilterInput, limit: Int, nextToken: String): ModelGuestPhotoConnection @aws_api_key @aws_iam @aws_cognito_user_pools
+}
+
+input ModelRSVPConditionInput {
+  fullName: ModelStringInput
+  email: ModelStringInput
+  phone: ModelStringInput
+  guestCount: ModelIntInput
+  attending: ModelBooleanInput
+  arrivalInfo: ModelStringInput
+  songRequest: ModelStringInput
+  message: ModelStringInput
+  language: ModelStringInput
+  and: [ModelRSVPConditionInput]
+  or: [ModelRSVPConditionInput]
+  not: ModelRSVPConditionInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+}
+
+input CreateRSVPInput {
+  fullName: String!
+  email: String
+  phone: String
+  guestCount: Int!
+  attending: Boolean!
+  arrivalInfo: String
+  songRequest: String
+  message: String
+  language: String!
+  id: ID
+}
+
+input UpdateRSVPInput {
+  fullName: String
+  email: String
+  phone: String
+  guestCount: Int
+  attending: Boolean
+  arrivalInfo: String
+  songRequest: String
+  message: String
+  language: String
+  id: ID!
+}
+
+input DeleteRSVPInput {
+  id: ID!
+}
+
+type Mutation {
+  createRSVP(input: CreateRSVPInput!, condition: ModelRSVPConditionInput): RSVP @aws_api_key @aws_iam @aws_cognito_user_pools
+  updateRSVP(input: UpdateRSVPInput!, condition: ModelRSVPConditionInput): RSVP @aws_iam @aws_cognito_user_pools
+  deleteRSVP(input: DeleteRSVPInput!, condition: ModelRSVPConditionInput): RSVP @aws_iam @aws_cognito_user_pools
+  createGuestPhoto(input: CreateGuestPhotoInput!, condition: ModelGuestPhotoConditionInput): GuestPhoto @aws_api_key @aws_iam @aws_cognito_user_pools
+  updateGuestPhoto(input: UpdateGuestPhotoInput!, condition: ModelGuestPhotoConditionInput): GuestPhoto @aws_iam @aws_cognito_user_pools
+  deleteGuestPhoto(input: DeleteGuestPhotoInput!, condition: ModelGuestPhotoConditionInput): GuestPhoto @aws_iam @aws_cognito_user_pools
+}
+
+input ModelSubscriptionRSVPFilterInput {
+  fullName: ModelSubscriptionStringInput
+  email: ModelSubscriptionStringInput
+  phone: ModelSubscriptionStringInput
+  guestCount: ModelSubscriptionIntInput
+  attending: ModelSubscriptionBooleanInput
+  arrivalInfo: ModelSubscriptionStringInput
+  songRequest: ModelSubscriptionStringInput
+  message: ModelSubscriptionStringInput
+  language: ModelSubscriptionStringInput
+  id: ModelSubscriptionIDInput
+  createdAt: ModelSubscriptionStringInput
+  updatedAt: ModelSubscriptionStringInput
+  and: [ModelSubscriptionRSVPFilterInput]
+  or: [ModelSubscriptionRSVPFilterInput]
+}
+
+type Subscription {
+  onCreateRSVP(filter: ModelSubscriptionRSVPFilterInput): RSVP @aws_subscribe(mutations: ["createRSVP"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onUpdateRSVP(filter: ModelSubscriptionRSVPFilterInput): RSVP @aws_subscribe(mutations: ["updateRSVP"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onDeleteRSVP(filter: ModelSubscriptionRSVPFilterInput): RSVP @aws_subscribe(mutations: ["deleteRSVP"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onCreateGuestPhoto(filter: ModelSubscriptionGuestPhotoFilterInput): GuestPhoto @aws_subscribe(mutations: ["createGuestPhoto"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onUpdateGuestPhoto(filter: ModelSubscriptionGuestPhotoFilterInput): GuestPhoto @aws_subscribe(mutations: ["updateGuestPhoto"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onDeleteGuestPhoto(filter: ModelSubscriptionGuestPhotoFilterInput): GuestPhoto @aws_subscribe(mutations: ["deleteGuestPhoto"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+}
+
+type ModelGuestPhotoConnection @aws_api_key @aws_iam @aws_cognito_user_pools {
+  items: [GuestPhoto]!
+  nextToken: String
+}
+
+input ModelGuestPhotoFilterInput {
+  storagePath: ModelStringInput
+  originalFileName: ModelStringInput
+  uploaderName: ModelStringInput
+  message: ModelStringInput
+  id: ModelIDInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  and: [ModelGuestPhotoFilterInput]
+  or: [ModelGuestPhotoFilterInput]
+  not: ModelGuestPhotoFilterInput
+}
+
+input ModelGuestPhotoConditionInput {
+  storagePath: ModelStringInput
+  originalFileName: ModelStringInput
+  uploaderName: ModelStringInput
+  message: ModelStringInput
+  and: [ModelGuestPhotoConditionInput]
+  or: [ModelGuestPhotoConditionInput]
+  not: ModelGuestPhotoConditionInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+}
+
+input CreateGuestPhotoInput {
+  storagePath: String
+  originalFileName: String
+  uploaderName: String
+  message: String
+  id: ID
+}
+
+input UpdateGuestPhotoInput {
+  storagePath: String
+  originalFileName: String
+  uploaderName: String
+  message: String
+  id: ID!
+}
+
+input DeleteGuestPhotoInput {
+  id: ID!
+}
+
+input ModelSubscriptionGuestPhotoFilterInput {
+  storagePath: ModelSubscriptionStringInput
+  originalFileName: ModelSubscriptionStringInput
+  uploaderName: ModelSubscriptionStringInput
+  message: ModelSubscriptionStringInput
+  id: ModelSubscriptionIDInput
+  createdAt: ModelSubscriptionStringInput
+  updatedAt: ModelSubscriptionStringInput
+  and: [ModelSubscriptionGuestPhotoFilterInput]
+  or: [ModelSubscriptionGuestPhotoFilterInput]
+}

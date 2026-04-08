@@ -148,7 +148,8 @@
                     "allow": "public",
                     "provider": "apiKey",
                     "operations": [
-                      "create"
+                      "create",
+                      "read"
                     ]
                   },
                   {

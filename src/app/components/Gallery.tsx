@@ -18,7 +18,14 @@ import img0004 from "../../assets/gallery/IMG_0004.JPEG";
 import img7197 from "../../assets/gallery/IMG_7197.JPEG";
 import gliu3382 from "../../assets/gallery/GLIU3382.JPEG";
 
-type GuestPhotoCard = {
+type RSVPMessageCard = {
+  id: string;
+  fullName?: string | null;
+  message?: string | null;
+  createdAt?: string | null;
+};
+
+type GuestShareCard = {
   id: string;
   url?: string | null;
   uploaderName?: string | null;
@@ -57,8 +64,9 @@ export function Gallery() {
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
   const [uploaderName, setUploaderName] = useState("");
   const [guestMessage, setGuestMessage] = useState("");
-  const [guestPhotos, setGuestPhotos] = useState<GuestPhotoCard[]>([]);
-  const [loadingGuestPhotos, setLoadingGuestPhotos] = useState(false);
+  const [guestShares, setGuestShares] = useState<GuestShareCard[]>([]);
+  const [loadingGuestShares, setLoadingGuestShares] = useState(false);
+  const [guestSharesError, setGuestSharesError] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [uploadSuccess, setUploadSuccess] = useState("");
@@ -103,11 +111,12 @@ export function Gallery() {
     uploadSuccess: isZh ? "内容提交成功。" : "Your upload was submitted successfully.",
     uploadFailed: isZh ? "提交失败，请稍后重试。" : "Submission failed. Please try again.",
     uploadedPhotosTitle: isZh ? "宾客分享" : "Guest Shares",
-    uploadedPhotosSub: isZh ? "宾客上传的照片和留言会出现在这里。" : "Photos and notes uploaded by guests will appear here.",
+    uploadedPhotosSub: isZh ? "RSVP 里的留言，以及宾客上传的照片和留言，都会出现在这里。" : "RSVP notes and guest-uploaded photos and messages will appear here.",
     uploadedEmpty: isZh ? "还没有宾客分享，等你来第一条。" : "No guest shares yet. Be the first to post.",
     uploadedBy: isZh ? "上传者" : "Uploaded by",
     noValue: isZh ? "未填写" : "Not provided",
     loadingUploads: isZh ? "正在加载宾客内容..." : "Loading guest uploads...",
+    loadUploadsFailed: isZh ? "读取宾客分享失败。" : "Failed to load guest shares.",
     comingSoonTitle: isZh ? "更多照片即将上线" : "More Photos Coming Soon",
     comingSoonSub: isZh ? "婚礼当天的专业摄影作品也会在婚礼后补充到这里。" : "Professional wedding photos will also be added here after the big day.",
   };
@@ -117,51 +126,69 @@ export function Gallery() {
       return;
     }
 
-    const loadGuestPhotos = async () => {
-      setLoadingGuestPhotos(true);
+    const loadGuestShares = async () => {
+      setLoadingGuestShares(true);
+      setGuestSharesError("");
 
       try {
-        const { data, errors } = await publicClient.models.GuestPhoto.list(
-          {
+        const [{ data: photoData, errors: photoErrors }, { data: rsvpData, errors: rsvpErrors }] = await Promise.all([
+          publicClient.models.GuestPhoto.list({
             limit: 100,
             selectionSet: ["id", "storagePath", "originalFileName", "uploaderName", "message", "createdAt"],
-          },
-        );
+          }),
+          publicClient.models.RSVP.list({
+            limit: 100,
+            selectionSet: ["id", "fullName", "message", "createdAt"],
+          }),
+        ]);
 
-        if (errors?.length) {
-          throw new Error(errors[0].message);
+        if (photoErrors?.length) {
+          throw new Error(photoErrors[0].message);
+        }
+
+        if (rsvpErrors?.length) {
+          throw new Error(rsvpErrors[0].message);
         }
 
         const resolvedPhotos = await Promise.all(
-          (data ?? []).map(async (photo) => {
+          (photoData ?? []).map(async (photo) => {
             return {
-              id: photo.id,
+              id: `photo-${photo.id}`,
               url: buildPublicGuestPhotoUrl(photo.storagePath),
               uploaderName: photo.uploaderName,
               message: photo.message,
               originalFileName: photo.originalFileName,
               createdAt: photo.createdAt,
-            } satisfies GuestPhotoCard;
+            } satisfies GuestShareCard;
           }),
         );
 
-        resolvedPhotos.sort((left, right) => {
+        const rsvpMessages = (rsvpData ?? [])
+          .filter((record): record is RSVPMessageCard => Boolean(record?.message?.trim()))
+          .map((record) => ({
+            id: `rsvp-${record.id}`,
+            uploaderName: record.fullName,
+            message: record.message,
+            createdAt: record.createdAt,
+          }) satisfies GuestShareCard);
+
+        const mergedShares = [...resolvedPhotos, ...rsvpMessages].sort((left, right) => {
           const leftTime = left.createdAt ? new Date(left.createdAt).getTime() : 0;
           const rightTime = right.createdAt ? new Date(right.createdAt).getTime() : 0;
           return rightTime - leftTime;
         });
 
-        setGuestPhotos(resolvedPhotos);
+        setGuestShares(mergedShares);
       } catch (error) {
-        const message = error instanceof Error && error.message ? error.message : content.uploadFailed;
-        setUploadError(message);
+        const message = error instanceof Error && error.message ? error.message : content.loadUploadsFailed;
+        setGuestSharesError(message);
       } finally {
-        setLoadingGuestPhotos(false);
+        setLoadingGuestShares(false);
       }
     };
 
-    void loadGuestPhotos();
-  }, [content.uploadFailed]);
+    void loadGuestShares();
+  }, [content.loadUploadsFailed]);
 
   const handleUpload = async () => {
     setUploadError("");
@@ -251,17 +278,17 @@ export function Gallery() {
           }
 
           return {
-            id: data.id,
+            id: `photo-${data.id}`,
             url: buildPublicGuestPhotoUrl(storagePath),
             uploaderName: data.uploaderName,
             message: data.message,
             originalFileName: data.originalFileName,
             createdAt: data.createdAt,
-          } satisfies GuestPhotoCard;
+          } satisfies GuestShareCard;
         }),
       );
 
-      setGuestPhotos((current) =>
+      setGuestShares((current) =>
         [...uploadedCards, ...current].sort((left, right) => {
           const leftTime = left.createdAt ? new Date(left.createdAt).getTime() : 0;
           const rightTime = right.createdAt ? new Date(right.createdAt).getTime() : 0;
@@ -418,12 +445,13 @@ export function Gallery() {
             </h3>
             <p className="text-[#6b6256] mb-6">{content.uploadedPhotosSub}</p>
 
-            {loadingGuestPhotos ? <p className="text-[#6b6256]">{content.loadingUploads}</p> : null}
-            {!loadingGuestPhotos && guestPhotos.length === 0 ? <p className="text-[#6b6256]">{content.uploadedEmpty}</p> : null}
+            {loadingGuestShares ? <p className="text-[#6b6256]">{content.loadingUploads}</p> : null}
+            {!loadingGuestShares && guestSharesError ? <p className="text-[#b85c5c]">{guestSharesError}</p> : null}
+            {!loadingGuestShares && !guestSharesError && guestShares.length === 0 ? <p className="text-[#6b6256]">{content.uploadedEmpty}</p> : null}
 
-            {guestPhotos.length ? (
+            {guestShares.length ? (
               <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 lg:gap-6">
-                {guestPhotos.map((photo, index) => {
+                {guestShares.map((photo, index) => {
                   const hasPhoto = Boolean(photo.url);
 
                   return (

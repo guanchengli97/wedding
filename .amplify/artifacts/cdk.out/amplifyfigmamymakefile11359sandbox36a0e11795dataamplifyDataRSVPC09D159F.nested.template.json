@@ -613,7 +613,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QuerygetRSVPauth0Function",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/82ea6e67b4eb684f36409eedbb9479b19781a880e990b4b87b82dafd7ce6da6f.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/05eae167dce3e83672509b8befdb0ffd97815138ea2735d14d4c4c7a88ea5d1b.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -793,7 +793,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "QuerylistRSVPSauth0Function",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/82ea6e67b4eb684f36409eedbb9479b19781a880e990b4b87b82dafd7ce6da6f.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/05eae167dce3e83672509b8befdb0ffd97815138ea2735d14d4c4c7a88ea5d1b.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -1585,7 +1585,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "SubscriptiononCreateRSVPauth0Function",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/732636a5c7d4011ab6aead98acafa2658b2890fd6ed5dc99480b25c5ce15fc9c.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/00f6f589fe6e0f00cf86182c8bb5084fcd5cb277bc1fe6e2800788fa669d4fa3.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -1732,7 +1732,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "SubscriptiononUpdateRSVPauth0Function",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/732636a5c7d4011ab6aead98acafa2658b2890fd6ed5dc99480b25c5ce15fc9c.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/00f6f589fe6e0f00cf86182c8bb5084fcd5cb277bc1fe6e2800788fa669d4fa3.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },
@@ -1879,7 +1879,7 @@
     "FunctionVersion": "2018-05-29",
     "Name": "SubscriptiononDeleteRSVPauth0Function",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/732636a5c7d4011ab6aead98acafa2658b2890fd6ed5dc99480b25c5ce15fc9c.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/00f6f589fe6e0f00cf86182c8bb5084fcd5cb277bc1fe6e2800788fa669d4fa3.vtl"
     },
     "ResponseMappingTemplate": "$util.toJson({})"
    },

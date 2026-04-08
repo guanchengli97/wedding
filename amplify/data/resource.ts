@@ -14,7 +14,7 @@ const schema = a.schema({
       language: a.string().required(),
     })
     .authorization((allow) => [
-      allow.publicApiKey().to(["create"]),
+      allow.publicApiKey().to(["create", "read"]),
       allow.group("ADMINS"),
     ]),
   GuestPhoto: a
